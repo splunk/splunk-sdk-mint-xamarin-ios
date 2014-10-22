@@ -1,9 +1,9 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.George's iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="SplunkMint.Xamarin-iOS/ApiDefinition.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPhone5s.7.1" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="SplunkMint-iOS.ClientApp/AppDelegate.cs">
     <Files>
-      <File FileName="SplunkMint.Xamarin-iOS/ApiDefinition.cs" Line="66" Column="66" />
-      <File FileName="SplunkMint-iOS.ClientApp/AppDelegate.cs" Line="1" Column="1" />
+      <File FileName="SplunkMint.Xamarin-iOS/ApiDefinition.cs" Line="33" Column="33" />
+      <File FileName="SplunkMint-iOS.ClientApp/AppDelegate.cs" Line="4" Column="4" />
       <File FileName="SplunkMint-iOS.ClientApp/SplunkMint-iOS.ClientAppViewController.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
