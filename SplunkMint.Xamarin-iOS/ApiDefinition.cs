@@ -1150,6 +1150,9 @@ namespace SplunkMint
 		[Export ("initWithRequestWorker:")]
 		IntPtr Constructor (RequestWorkerFacadeDelegate requestWorker);
 
+		[Export ("disableCrashReporter")]
+		void DisableCrashReporter ();
+
 		[Export ("flushAsyncWithBlock:")]
 		[Async]
 		void Flush (ResponseResultBlock resultBlock);

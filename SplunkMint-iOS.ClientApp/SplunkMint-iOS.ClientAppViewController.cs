@@ -138,11 +138,13 @@ namespace SplunkMintiOS.ClientApp
 
 		void ShowAlert(string message)
 		{
-			UIAlertView alert = new UIAlertView();
-			alert.Title = "Alert";
-			alert.AddButton("Ok");
-			alert.Message = message;
-			alert.Show();
+			UIApplication.SharedApplication.InvokeOnMainThread (() => {
+				UIAlertView alert = new UIAlertView ();
+				alert.Title = "Alert";
+				alert.AddButton ("Ok");
+				alert.Message = message;
+				alert.Show ();
+			});
 		}
 
 		private const string URLRequestBin = "http://requestb.in/1em241j1";
