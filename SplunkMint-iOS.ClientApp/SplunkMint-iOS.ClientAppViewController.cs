@@ -17,6 +17,11 @@ namespace SplunkMintiOS.ClientApp
 {
 	public partial class SplunkMint_iOS_ClientAppViewController : UIViewController
 	{
+		const string Identifier = "com.SimpleBackgroundTransfer.BackgroundSession";
+		const string DownloadUrlString = "https://atmire.com/dspace-labs3/bitstream/handle/123456789/7618/earth-map-huge.jpg";
+
+		public NSUrlSessionDownloadTask downloadTask;
+		public NSUrlSession session;
 
 		public SplunkMint_iOS_ClientAppViewController (IntPtr handle) : base (handle)
 		{
@@ -37,6 +42,9 @@ namespace SplunkMintiOS.ClientApp
 			base.ViewDidLoad ();
 
 			// Perform any additional setup after loading the view, typically from a nib.
+
+			if (session == null)
+				session = InitBackgroundSession ();
 
 			LogHandledExceptionButton.TouchUpInside += LogHandledExceptionButton_TouchUpInside;
 			WebRequestButton.TouchUpInside += WebRequestRestPostButton_TouchUpInside;
@@ -92,6 +100,10 @@ namespace SplunkMintiOS.ClientApp
 			Mint.SharedInstance.AddURLToBlacklist ("www.splunk.com");
 		}
 
+		#endregion
+
+		#region Helper Methods
+
 		void ShowAlert(string message)
 		{
 			UIApplication.SharedApplication.InvokeOnMainThread (() => {
@@ -103,10 +115,29 @@ namespace SplunkMintiOS.ClientApp
 			});
 		}
 
+		#endregion
+
+		#region Throw Unhandled Exceptions
+
 		partial void UIButton5_TouchUpInside (UIButton sender)
 		{
 			throw new NotImplementedException ("NOT IMPLEMENTED? WOW!!!");
 		}
+
+		partial void ApplicationExceptionButton_TouchUpInside (UIButton sender)
+		{
+			throw new ApplicationException("ApplicationException is thrown on purpose with InnerException",
+				new NullReferenceException("Just an InnerException of type NullReferenceException"));
+		}
+
+		partial void ArgumentExceptionButton_TouchUpInside (UIButton sender)
+		{
+			throw new ArgumentException("Your param whatever is not complying to the requirements", "whatever");
+		}
+
+		#endregion
+
+		#region Log Handled Exception
 
 		async void LogHandledExceptionButton_TouchUpInside (object sender, EventArgs args)
 		{
@@ -124,6 +155,10 @@ namespace SplunkMintiOS.ClientApp
 				Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
 			}
 		}
+
+		#endregion
+
+		#region Transactions
 
 		private const string TransactionId = "SplunkMintXamarinTransaction";
 
@@ -145,55 +180,17 @@ namespace SplunkMintiOS.ClientApp
 				? "Successfully" : "Failed", TransactionId);
 		}
 
+		#endregion
+
+		#region Network Monitoring
+
 		private const string URLRequestBin = "http://requestb.in/19qubyi1";
 
-		async void ModernHttpClientButton_TouchUpInside (object sender, EventArgs e)
-		{
-			HttpClient httpClient = new HttpClient(new NativeMessageHandler());
-			HttpResponseMessage responseMessage = await httpClient.PostAsync(URLRequestBin, new StringContent("Just A Test"));
-
-			ShowAlert (responseMessage.ToString ());
-		}
+		#region Not Supported Network Monitoring APIs - Present to prove that the application continues to works properly
 
 		async void WebRequestRestPostButton_TouchUpInside (object sender, EventArgs args)
 		{
 			await CallRequestBinWithWebRequest();
-		}
-
-		async void HttpClientRestPostButton_TouchUpInside (object sender, EventArgs args)
-		{
-			await CallRequestBinWithHttpClient();
-		}
-
-		private async Task CallRequestBinWithHttpClient()
-		{
-			try
-			{
-				using (HttpClientHandler handler = new HttpClientHandler())
-				{
-					HttpClient httpClient = new HttpClient(handler);
-					StringContent dataStringContent = new StringContent("Sample Text Data for HttpClient!");
-					dataStringContent.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
-					HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, URLRequestBin)
-					{
-						Content = dataStringContent
-					};
-					HttpResponseMessage response = await httpClient.SendAsync(request).ConfigureAwait(false);
-					string responseString = await response.Content.ReadAsStringAsync();
-					if (response.StatusCode == HttpStatusCode.OK &&
-						response.IsSuccessStatusCode)
-					{
-						ShowAlert("HttpClient Succeed!");
-					}
-					else
-					{
-						ShowAlert("HttpClient Failed!");
-					}
-				}
-			}
-			catch(Exception ex) {
-				ShowAlert(string.Format("Exception from HttpClient request: {0}", ex));
-			}
 		}
 
 		private async Task CallRequestBinWithWebRequest()
@@ -229,11 +226,34 @@ namespace SplunkMintiOS.ClientApp
 			}
 		}
 
+		#endregion
+
+		#region NSURLSession and NSURLConnection native APIs
+
+		partial void Start (UIButton sender)
+		{
+			if (downloadTask != null)
+				return;
+
+			using (var url = NSUrl.FromString (DownloadUrlString))
+			using (var request = NSUrlRequest.FromUrl (url)) {
+				downloadTask = session.CreateDownloadTask (request);
+				downloadTask.Resume ();
+			}
+		}
+
+		public NSUrlSession InitBackgroundSession ()
+		{
+			Console.WriteLine ("InitBackgroundSession");
+			using (var configuration = NSUrlSessionConfiguration.BackgroundSessionConfiguration (Identifier)) {
+				return NSUrlSession.FromConfiguration (configuration, new UrlSessionDelegate (this), null);
+			}
+		}
+
 		void NSUrlSessionButton_TouchUpInside(object sender, EventArgs args)
 		{
 			NSUrlSessionConfiguration sessionConfig = NSUrlSessionConfiguration.DefaultSessionConfiguration;
 			sessionConfig.AllowsCellularAccess = true;
-//			sessionConfig.HttpAdditionalHeaders.SetValueForKey (NSObject.FromObject("NSURLSessionRequest"), "Splunk-Network-Interception");
 			sessionConfig.TimeoutIntervalForRequest = 30.0;
 			sessionConfig.TimeoutIntervalForResource = 60.0;
 			sessionConfig.HttpMaximumConnectionsPerHost = 1;
@@ -241,6 +261,48 @@ namespace SplunkMintiOS.ClientApp
 			NSUrlSession session = NSUrlSession.FromConfiguration(sessionConfig);
 			NSUrlSessionDataTask dataTask = session.CreateDataTask (NSUrl.FromString (URLRequestBin));
 			dataTask.Resume ();
+		}
+
+		async void HttpClientRestPostButton_TouchUpInside (object sender, EventArgs args)
+		{
+			try
+			{
+				using (HttpClientHandler handler = new HttpClientHandler())
+				{
+					SplunkInterceptionHttpHandler interceptionHandler = new SplunkInterceptionHttpHandler(handler);
+					HttpClient httpClient = new HttpClient(interceptionHandler);
+					StringContent dataStringContent = new StringContent("Sample Text Data for HttpClient!");
+					dataStringContent.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
+					HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post, URLRequestBin)
+					{
+						Content = dataStringContent
+					};
+					HttpResponseMessage response = await httpClient.SendAsync(request).ConfigureAwait(false);
+					string responseString = await response.Content.ReadAsStringAsync();
+					if (response.StatusCode == HttpStatusCode.OK &&
+						response.IsSuccessStatusCode)
+					{
+						ShowAlert("HttpClient Succeed!");
+					}
+					else
+					{
+						ShowAlert("HttpClient Failed!");
+					}
+				}
+			}
+			catch(Exception ex) {
+				ShowAlert(string.Format("Exception from HttpClient request: {0}", ex));
+			}
+		}
+
+		async void ModernHttpClientButton_TouchUpInside (object sender, EventArgs e)
+		{
+			// Use SplunkInterceptionHttpHandler to intercept your networking REST calls
+			SplunkInterceptionHttpHandler interceptionHandler = new SplunkInterceptionHttpHandler(new NativeMessageHandler());
+			HttpClient httpClient = new HttpClient (interceptionHandler);
+			HttpResponseMessage responseMessage = await httpClient.PostAsync(URLRequestBin, new StringContent("Just A Test"));
+
+			ShowAlert (responseMessage.ToString ());
 		}
 
 		void NSUrlConnectionButton_TouchUpInside(object sender, EventArgs args)
@@ -251,8 +313,31 @@ namespace SplunkMintiOS.ClientApp
 			urlRequest.Body = NSData.FromString ("data=This is some data");
 
 			NSUrlConnection connection = new NSUrlConnection(urlRequest, new RxTermNSURLConnectionDelegate(), true);
-			connection.Start ();
 		}
+
+		partial void NSUrlConnectionButtonXamarinExample_TouchUpInside(UIButton sender)
+		{
+			string rxcui = "198440";
+			NSMutableUrlRequest request = new NSMutableUrlRequest(new NSUrl(string.Format("http://rxnav.nlm.nih.gov/REST/RxTerms/rxcui/{0}/allinfo", rxcui)), 
+				NSUrlRequestCachePolicy.ReloadRevalidatingCacheData, 20);
+			request["Accept"] = "application/json";
+
+			RxTermNSURLConnectionDelegate connectionDelegate = new RxTermNSURLConnectionDelegate();
+
+			// There's a known bug currently in progress and we can't intercept NSURLConnection calls initialized without the startImmediately parameter.
+			// This will not work
+			NSUrlConnection aConnection = new NSUrlConnection(request, connectionDelegate);
+			aConnection.Start();
+
+			// But this works normally and your network call will be intercepted.
+			NSUrlConnection connection = new NSUrlConnection(request, connectionDelegate, true);
+		}
+
+		#endregion
+
+		#endregion
+
+		#region Log Event
 
 		async void LogLevelEventButton_TouchUpInside (object sender, EventArgs args)
 		{
@@ -265,6 +350,10 @@ namespace SplunkMintiOS.ClientApp
 				? "OK" : "Failed");
 		}
 
+		#endregion
+
+		#region Flush Cached Requests
+
 		async void FlushButton_TouchUpInside (object sender, EventArgs args)
 		{
 			MintResponseResult responseResult = await Mint.SharedInstance.FlushAsync ();
@@ -275,16 +364,9 @@ namespace SplunkMintiOS.ClientApp
 				responseResult.ClientRequest);
 		}
 
-		partial void ApplicationExceptionButton_TouchUpInside (UIButton sender)
-		{
-			throw new ApplicationException("ApplicationException is thrown on purpose with InnerException",
-				new NullReferenceException("Just an InnerException of type NullReferenceException"));
-		}
+		#endregion
 
-		partial void ArgumentExceptionButton_TouchUpInside (UIButton sender)
-		{
-			throw new ArgumentException("Your param whatever is not complying to the requirements", "whatever");
-		}
+		#region Session Handling
 
 		async void StartSessionButton_TouchUpInside (object sender, EventArgs args)
 		{
@@ -303,9 +385,11 @@ namespace SplunkMintiOS.ClientApp
 				logResult.ResultState == MintResultState.OKResultState
 				? "Succeed" : "Failed");
 		}
-			
+
 		#endregion
 	}
+
+	#region NSURLConnectionDelegate
 
 	public class RxTermNSURLConnectionDelegate : NSUrlConnectionDelegate
 	{
@@ -331,5 +415,93 @@ namespace SplunkMintiOS.ClientApp
 			ResponseContent = _ResponseBuilder.ToString();
 		}
 	}
+
+	#endregion
+
+	#region NSURLSessionDelegate
+
+	public class UrlSessionDelegate : NSUrlSessionDownloadDelegate
+	{
+		public SplunkMint_iOS_ClientAppViewController controller;
+
+		public UrlSessionDelegate (SplunkMint_iOS_ClientAppViewController controller)
+		{
+			this.controller = controller;
+		}
+
+		public override void DidWriteData (NSUrlSession session, NSUrlSessionDownloadTask downloadTask, long bytesWritten, long totalBytesWritten, long totalBytesExpectedToWrite)
+		{
+			Console.WriteLine ("Set Progress");
+			if (downloadTask == controller.downloadTask) {
+				float progress = totalBytesWritten / (float)totalBytesExpectedToWrite;
+				Console.WriteLine (string.Format ("DownloadTask: {0}  progress: {1}", downloadTask, progress));
+				InvokeOnMainThread( () => {
+					// Update any UI components like a progress bar
+				});
+			}
+		}
+
+		public override void DidFinishDownloading (NSUrlSession session, NSUrlSessionDownloadTask downloadTask, NSUrl location)
+		{
+			Console.WriteLine ("Finished");
+			Console.WriteLine ("File downloaded in : {0}", location);
+			NSFileManager fileManager = NSFileManager.DefaultManager;
+
+			var URLs = fileManager.GetUrls (NSSearchPathDirectory.DocumentDirectory, NSSearchPathDomain.User);
+			NSUrl documentsDictionry = URLs [0];
+
+			NSUrl originalURL = downloadTask.OriginalRequest.Url;
+			NSUrl destinationURL = documentsDictionry.Append ("image1.png", false);
+			NSError removeCopy;
+			NSError errorCopy;
+
+			fileManager.Remove (destinationURL, out removeCopy);
+			bool success = fileManager.Copy (location, destinationURL, out errorCopy);
+
+			if (success) {
+				// we do not need to be on the main/UI thread to load the UIImage
+				UIImage image = UIImage.FromFile (destinationURL.Path);
+				InvokeOnMainThread (() => {
+					// Update any UI components like a progress bar
+				});
+			} else {
+				Console.WriteLine ("Error during the copy: {0}", errorCopy.LocalizedDescription);
+			}
+		}
+
+		public override void DidCompleteWithError (NSUrlSession session, NSUrlSessionTask task, NSError error)
+		{
+			Console.WriteLine ("DidComplete");
+			if (error == null)
+				Console.WriteLine ("Task: {0} completed successfully", task);
+			else
+				Console.WriteLine ("Task: {0} completed with error: {1}", task, error.LocalizedDescription);
+
+			float progress = task.BytesReceived / (float)task.BytesExpectedToReceive;
+			InvokeOnMainThread (() => {
+				// Update any UI components like a progress bar
+			});
+
+			controller.downloadTask = null;
+		}
+
+		public override void DidResume (NSUrlSession session, NSUrlSessionDownloadTask downloadTask, long resumeFileOffset, long expectedTotalBytes)
+		{
+			Console.WriteLine ("DidResume");
+		}
+
+		public override void DidFinishEventsForBackgroundSession (NSUrlSession session)
+		{
+			AppDelegate appDelegate = UIApplication.SharedApplication.Delegate as AppDelegate;
+			var handler = appDelegate.BackgroundSessionCompletionHandler;
+			if (handler != null) {
+				appDelegate.BackgroundSessionCompletionHandler = null;
+				handler.Invoke ();
+			}
+			Console.WriteLine ("All tasks are finished");
+		}
+	}
+
+	#endregion
 }
 

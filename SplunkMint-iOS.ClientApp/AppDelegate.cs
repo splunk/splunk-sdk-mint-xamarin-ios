@@ -7,6 +7,7 @@ using MonoTouch.UIKit;
 
 using SplunkMint;
 using System.Diagnostics;
+using System.Threading;
 
 namespace SplunkMintiOS.ClientApp
 {
@@ -17,7 +18,9 @@ namespace SplunkMintiOS.ClientApp
 	public partial class AppDelegate : UIApplicationDelegate
 	{
 		// class-level declarations
-		
+
+		public NSAction BackgroundSessionCompletionHandler { get; set; }
+
 		public override UIWindow Window {
 			get;
 			set;
@@ -35,6 +38,22 @@ namespace SplunkMintiOS.ClientApp
 			Mint.SharedInstance.InitAndStartSession ("bc7388ee");
 
 			return true;
+		}
+
+		public override void HandleEventsForBackgroundUrl (UIApplication application, string sessionIdentifier, NSAction completionHandler)
+		{
+			Console.WriteLine ("Surely first {0}", Thread.CurrentThread);
+			BackgroundSessionCompletionHandler = completionHandler;
+		}
+
+		public override void OnActivated (UIApplication application)
+		{
+			Console.WriteLine ("OnActivated");
+		}
+
+		public override void OnResignActivation (UIApplication application)
+		{
+			Console.WriteLine ("OnResignActivation");
 		}
 	}
 }

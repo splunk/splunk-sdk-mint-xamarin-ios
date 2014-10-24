@@ -70,6 +70,14 @@ namespace SplunkMintiOS.ClientApp
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void ArgumentExceptionButton_TouchUpInside (UIButton sender);
 
+		[Action ("NSUrlConnectionButtonXamarinExample_TouchUpInside:")]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		partial void NSUrlConnectionButtonXamarinExample_TouchUpInside (UIButton sender);
+
+		[Action ("Start:")]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		partial void Start (UIButton sender);
+
 		[Action ("UIButton5_TouchUpInside:")]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void UIButton5_TouchUpInside (UIButton sender);
