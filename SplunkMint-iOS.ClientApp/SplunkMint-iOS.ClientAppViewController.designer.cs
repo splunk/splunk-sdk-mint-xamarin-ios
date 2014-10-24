@@ -16,6 +16,14 @@ namespace SplunkMintiOS.ClientApp
 	{
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton CloseSessionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton FlushButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton HTTPClientButton { get; set; }
 
 		[Outlet]
@@ -32,6 +40,26 @@ namespace SplunkMintiOS.ClientApp
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton NSUrlConnectionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton NSUrlSessionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton StartSessionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton StartTransactionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton StopTransactionButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton WebRequestButton { get; set; }
 
 		[Action ("ApplicationExceptionButton_TouchUpInside:")]
@@ -42,36 +70,20 @@ namespace SplunkMintiOS.ClientApp
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void ArgumentExceptionButton_TouchUpInside (UIButton sender);
 
-		[Action ("CloseSessionButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void CloseSessionButton_TouchUpInside (UIButton sender);
-
-		[Action ("FlushButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void FlushButton_TouchUpInside (UIButton sender);
-
-		[Action ("MintLogButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void MintLogButton_TouchUpInside (UIButton sender);
-
-		[Action ("StartSessionButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void StartSessionButton_TouchUpInside (UIButton sender);
-
-		[Action ("StartTransactionButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void StartTransactionButton_TouchUpInside (UIButton sender);
-
-		[Action ("StopTransactionButton_TouchUpInside:")]
-		[GeneratedCode ("iOS Designer", "1.0")]
-		partial void StopTransactionButton_TouchUpInside (UIButton sender);
-
 		[Action ("UIButton5_TouchUpInside:")]
 		[GeneratedCode ("iOS Designer", "1.0")]
 		partial void UIButton5_TouchUpInside (UIButton sender);
 
 		void ReleaseDesignerOutlets ()
 		{
+			if (CloseSessionButton != null) {
+				CloseSessionButton.Dispose ();
+				CloseSessionButton = null;
+			}
+			if (FlushButton != null) {
+				FlushButton.Dispose ();
+				FlushButton = null;
+			}
 			if (HTTPClientButton != null) {
 				HTTPClientButton.Dispose ();
 				HTTPClientButton = null;
@@ -87,6 +99,26 @@ namespace SplunkMintiOS.ClientApp
 			if (ModernHttpClientButton != null) {
 				ModernHttpClientButton.Dispose ();
 				ModernHttpClientButton = null;
+			}
+			if (NSUrlConnectionButton != null) {
+				NSUrlConnectionButton.Dispose ();
+				NSUrlConnectionButton = null;
+			}
+			if (NSUrlSessionButton != null) {
+				NSUrlSessionButton.Dispose ();
+				NSUrlSessionButton = null;
+			}
+			if (StartSessionButton != null) {
+				StartSessionButton.Dispose ();
+				StartSessionButton = null;
+			}
+			if (StartTransactionButton != null) {
+				StartTransactionButton.Dispose ();
+				StartTransactionButton = null;
+			}
+			if (StopTransactionButton != null) {
+				StopTransactionButton.Dispose ();
+				StopTransactionButton = null;
 			}
 			if (WebRequestButton != null) {
 				WebRequestButton.Dispose ();

@@ -1110,7 +1110,7 @@ namespace SplunkMint
 	public partial interface MintNotificationDelegate {
 
 		[Export ("loggedRequestHandled:")]
-		void LoggedRequestsHandled (LoggedRequestEventArgs args);
+		void CachedRequestsSent (LoggedRequestEventArgs args);
 
 		[Export ("networkDataLogged:")]
 		void NetworkDataIntercepted (NetworkDataFixture networkData);

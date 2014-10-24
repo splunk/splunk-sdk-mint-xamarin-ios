@@ -34,7 +34,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="StartTransactionButton_TouchUpInside:" destination="5" id="14" eventType="touchUpInside"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="13" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
@@ -43,7 +42,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="StopTransactionButton_TouchUpInside:" destination="5" id="15" eventType="touchUpInside"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="16" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
@@ -76,7 +74,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="FlushButton_TouchUpInside:" destination="5" id="21" eventType="touchUpInside"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="22" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
@@ -109,7 +106,6 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="StartSessionButton_TouchUpInside:" destination="5" id="29" eventType="touchUpInside"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="28" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
@@ -118,21 +114,23 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="CloseSessionButton_TouchUpInside:" destination="5" id="30" eventType="touchUpInside"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="34" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="115" y="418" width="97" height="30"/>
-                                <state key="normal" title="Mint Log">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="MintLogButton_TouchUpInside:" destination="5" id="35" eventType="touchUpInside"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="39" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="16" y="450" width="274" height="30"/>
+                                <rect key="frame" x="23" y="418" width="274" height="30"/>
                                 <state key="normal" title="Modern HTTP Client">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="59" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="16" y="462" width="287" height="30"/>
+                                <state key="normal" title="NSURLSession Request">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="64" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="20" y="500" width="280" height="30"/>
+                                <state key="normal" title="NSURLConnection Request">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
@@ -148,6 +146,13 @@
                         <outlet property="LogHandledExceptionButton" destination="18" id="name-outlet-18"/>
                         <outlet property="LogEventWithTagButton" destination="19" id="name-outlet-19"/>
                         <outlet property="ModernHttpClientButton" destination="39" id="name-outlet-39"/>
+                        <outlet property="StartSessionButton" destination="27" id="name-outlet-27"/>
+                        <outlet property="CloseSessionButton" destination="28" id="name-outlet-28"/>
+                        <outlet property="FlushButton" destination="20" id="name-outlet-20"/>
+                        <outlet property="StartTransactionButton" destination="12" id="name-outlet-12"/>
+                        <outlet property="StopTransactionButton" destination="13" id="name-outlet-13"/>
+                        <outlet property="NSUrlSessionButton" destination="59" id="name-outlet-59"/>
+                        <outlet property="NSUrlConnectionButton" destination="64" id="name-outlet-64"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7" userLabel="First Responder" sceneMemberID="firstResponder"/>

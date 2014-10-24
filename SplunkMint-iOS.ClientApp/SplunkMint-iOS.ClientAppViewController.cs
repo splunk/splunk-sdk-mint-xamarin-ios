@@ -43,47 +43,65 @@ namespace SplunkMintiOS.ClientApp
 			HTTPClientButton.TouchUpInside += HttpClientRestPostButton_TouchUpInside;
 			LogEventWithTagButton.TouchUpInside += LogLevelEventButton_TouchUpInside;
 			ModernHttpClientButton.TouchUpInside += ModernHttpClientButton_TouchUpInside;
+			StartSessionButton.TouchUpInside += StartSessionButton_TouchUpInside;
+			CloseSessionButton.TouchUpInside += CloseSessionButton_TouchUpInside;
+			FlushButton.TouchUpInside += FlushButton_TouchUpInside;
+			StartSessionButton.TouchUpInside += StartTransactionButton_TouchUpInside;
+			StopTransactionButton.TouchUpInside += StopTransactionButton_TouchUpInside;
+			NSUrlSessionButton.TouchUpInside += NSUrlSessionButton_TouchUpInside;
+			NSUrlConnectionButton.TouchUpInside += NSUrlConnectionButton_TouchUpInside;
 
-			Mint.SharedInstance.LoggedRequestsHandled += (sender, args) =>
+			Mint.SharedInstance.CachedRequestsSent += (sender, args) =>
 			{
-				var realArgs = (LoggedRequestEventArgs)sender;
+				LoggedRequestEventArgs loggedRequestEventArgs = (LoggedRequestEventArgs)sender;
 				Debug.WriteLine ("Logged Request Handled {0} with JSON:\r\n{1}",
-					realArgs.ResponseResult.ResultState == MintResultState.OKResultState
+					loggedRequestEventArgs.ResponseResult.ResultState == MintResultState.OKResultState
 					? "Successfully" : "with Failure and",
-					realArgs.ResponseResult.ClientRequest);
+					loggedRequestEventArgs.ResponseResult.ClientRequest);
 			};
 
-			Mint.SharedInstance.NetworkDataIntercepted += (sender, e) => 
+			Mint.SharedInstance.NetworkDataIntercepted += (sender, args) => 
 			{
-				ShowAlert("Network Data Intercepted!");
+				NetworkDataFixture networkDataFixture = (NetworkDataFixture)sender;
+				Debug.WriteLine("Network Data Logged: {0}", networkDataFixture.ToJSONString);
 			};
 
 			Mint.SharedInstance.AddExtraData(new ExtraData("GlobalKey1", "GlobalValue1"));
+
 			LimitedExtraDataList extraDataList = new LimitedExtraDataList ();
 			extraDataList.AddWithKey ("ListGlobalKey1", "ListGlobalValue1");
+
 			Mint.SharedInstance.AddExtraDataList (extraDataList);
+
+			Mint.SharedInstance.ClearExtraData ();
+
+			LimitedExtraDataList globalExtraDataList = Mint.SharedInstance.ExtraDataList;
+
+			Mint.SharedInstance.ExtraDataList.AddWithKey ("GlobalKey1", "GlobalValue1");
+
+			Mint.SharedInstance.ExtraDataList.Add(new ExtraData("GlobalExtraKey1", "GlobalExtraValue1"));
+
+			Mint.SharedInstance.RemoveExtraDataWithKey ("GlobalKey1");
+
+			Mint.SharedInstance.ClearBreadcrumbs ();
+
+			Mint.SharedInstance.LeaveBreadcrumb ("SplunkMint-iOS.ClientAppViewController:ViewDidLoad");
+
+			Mint.SharedInstance.UserIdentifier = "gtaskos@splunk.com";
+
+			Mint.SharedInstance.AddURLToBlacklist ("www.splunk.com");
 		}
 
-		public override void ViewWillAppear (bool animated)
+		void ShowAlert(string message)
 		{
-			base.ViewWillAppear (animated);
+			UIApplication.SharedApplication.InvokeOnMainThread (() => {
+				UIAlertView alert = new UIAlertView ();
+				alert.Title = "Alert";
+				alert.AddButton ("Ok");
+				alert.Message = message;
+				alert.Show ();
+			});
 		}
-
-		public override void ViewDidAppear (bool animated)
-		{
-			base.ViewDidAppear (animated);
-		}
-
-		public override void ViewWillDisappear (bool animated)
-		{
-			base.ViewWillDisappear (animated);
-		}
-
-		public override void ViewDidDisappear (bool animated)
-		{
-			base.ViewDidDisappear (animated);
-		}
-
 
 		partial void UIButton5_TouchUpInside (UIButton sender)
 		{
@@ -101,53 +119,33 @@ namespace SplunkMintiOS.ClientApp
 				LimitedExtraDataList extraDataList = new LimitedExtraDataList ();
 				extraDataList.AddWithKey ("HandledExceptionKey1", "HandledExceptionValue1");
 				MintLogResult logResult = await Mint.SharedInstance.LogExceptionAsync (ex.ToSplunkNSException(), extraDataList);
-				Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
+//				MintLogResult logResult = await Mint.SharedInstance.LogExceptionAsync (ex.ToSplunkNSException (), "Key1", "Value1");
 
-				// You can also use the LogException method with the delegate parameter to get response of the call
-//				Mint.SharedInstance.LogException(new NSException(ex.GetType().FullName, ex.Message, null), new LimitedExtraDataList(), 
-//					(MintLogResult logResult) => 
-//					{
-//						Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
-//					});
+				Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
 			}
 		}
 
 		private const string TransactionId = "SplunkMintXamarinTransaction";
 
-		partial void StartTransactionButton_TouchUpInside (UIButton sender)
+		async void StartTransactionButton_TouchUpInside (object sender, EventArgs args)
 		{
-			Mint.SharedInstance.TransactionStart(TransactionId, 
-				(TransactionStartResult transactionStartResult) => 
-				{
-					Debug.WriteLine("Transtaction Start {0} with ID {1}", 
-						transactionStartResult.TransactionStatus == TransactionStatus.SuccessfullyStartedTransaction
-						? "Successful" : "Failed", TransactionId);
-				});
+			TransactionStartResult transactionStartResult = await Mint.SharedInstance.TransactionStartAsync (TransactionId);
+
+			Debug.WriteLine("Transtaction Start {0} with ID {1}", 
+				transactionStartResult.TransactionStatus == TransactionStatus.SuccessfullyStartedTransaction
+				? "Successful" : "Failed", TransactionId);
 		}
 
-		partial void StopTransactionButton_TouchUpInside (UIButton sender)
+		async void StopTransactionButton_TouchUpInside (object sender, EventArgs args)
 		{
-			Mint.SharedInstance.TransactionStop(TransactionId, 
-				(TransactionStopResult transactionStopResult) => 
-				{
-					Debug.WriteLine("Transaction Stopped {0} eith ID {1}",
-						transactionStopResult.TransactionStatus == TransactionStatus.UserSuccessfullyStoppedTransaction
-						? "Successfully" : "Failed", TransactionId);
-				});
+			TransactionStopResult transactionStopResult = await Mint.SharedInstance.TransactionStopAsync (TransactionId); 
+
+			Debug.WriteLine("Transaction Stopped {0} eith ID {1}",
+				transactionStopResult.TransactionStatus == TransactionStatus.UserSuccessfullyStoppedTransaction
+				? "Successfully" : "Failed", TransactionId);
 		}
 
-		void ShowAlert(string message)
-		{
-			UIApplication.SharedApplication.InvokeOnMainThread (() => {
-				UIAlertView alert = new UIAlertView ();
-				alert.Title = "Alert";
-				alert.AddButton ("Ok");
-				alert.Message = message;
-				alert.Show ();
-			});
-		}
-
-		private const string URLRequestBin = "http://requestb.in/1em241j1";
+		private const string URLRequestBin = "http://requestb.in/19qubyi1";
 
 		async void ModernHttpClientButton_TouchUpInside (object sender, EventArgs e)
 		{
@@ -231,30 +229,50 @@ namespace SplunkMintiOS.ClientApp
 			}
 		}
 
+		void NSUrlSessionButton_TouchUpInside(object sender, EventArgs args)
+		{
+			NSUrlSessionConfiguration sessionConfig = NSUrlSessionConfiguration.DefaultSessionConfiguration;
+			sessionConfig.AllowsCellularAccess = true;
+//			sessionConfig.HttpAdditionalHeaders.SetValueForKey (NSObject.FromObject("NSURLSessionRequest"), "Splunk-Network-Interception");
+			sessionConfig.TimeoutIntervalForRequest = 30.0;
+			sessionConfig.TimeoutIntervalForResource = 60.0;
+			sessionConfig.HttpMaximumConnectionsPerHost = 1;
+
+			NSUrlSession session = NSUrlSession.FromConfiguration(sessionConfig);
+			NSUrlSessionDataTask dataTask = session.CreateDataTask (NSUrl.FromString (URLRequestBin));
+			dataTask.Resume ();
+		}
+
+		void NSUrlConnectionButton_TouchUpInside(object sender, EventArgs args)
+		{
+			NSUrl url = NSUrl.FromString (URLRequestBin);
+			NSMutableUrlRequest urlRequest = new NSMutableUrlRequest (url, NSUrlRequestCachePolicy.ReloadIgnoringLocalCacheData, 60.0);
+			urlRequest.HttpMethod = "POST";
+			urlRequest.Body = NSData.FromString ("data=This is some data");
+
+			NSUrlConnection connection = new NSUrlConnection(urlRequest, new RxTermNSURLConnectionDelegate(), true);
+			connection.Start ();
+		}
+
 		async void LogLevelEventButton_TouchUpInside (object sender, EventArgs args)
 		{
 			// log type DTO only for enterprise plan
-//			Mint.SharedInstance.LogEventWithName("SplunkMint Xamarin Log Level Event", MintLogLevel.NoticeLogLevel, 
-//				(MintLogResult logResult) =>
-//				{
-//					Debug.WriteLine("LogLevelEvent ResultState: {0}", 
-//						logResult.ResultState == MintResultState.OKResultState
-//						? "OK" : "Failed");
-//				});
+//			MintLogResult logResult = await Mint.SharedInstance.LogEventWithNameAsync ("SplunkMint Xamarin Log Level Event", MintLogLevel.NoticeLogLevel);
 
-			MintLogResult logResult = await Mint.SharedInstance.LogEventWithTagAsync("I pressed the loge event with tag button!");
+			MintLogResult logResult = await Mint.SharedInstance.LogEventWithTagAsync("I pressed the log event with tag button!");
+			Debug.WriteLine("LogLevelEvent ResultState: {0}", 
+				logResult.ResultState == MintResultState.OKResultState
+				? "OK" : "Failed");
 		}
 
-		partial void FlushButton_TouchUpInside (UIButton sender)
+		async void FlushButton_TouchUpInside (object sender, EventArgs args)
 		{
-			Mint.SharedInstance.Flush(
-				(MintResponseResult responseResult) => 
-				{
-					Debug.WriteLine("Flush is {0} with JSON\r\n{1}",
-						responseResult.ResultState == MintResultState.OKResultState
-						? "Successful" : "Failed",
-						responseResult.ClientRequest);
-				});
+			MintResponseResult responseResult = await Mint.SharedInstance.FlushAsync ();
+
+			Debug.WriteLine("Flush is {0} with JSON\r\n{1}",
+				responseResult.ResultState == MintResultState.OKResultState
+				? "Successful" : "Failed",
+				responseResult.ClientRequest);
 		}
 
 		partial void ApplicationExceptionButton_TouchUpInside (UIButton sender)
@@ -268,45 +286,50 @@ namespace SplunkMintiOS.ClientApp
 			throw new ArgumentException("Your param whatever is not complying to the requirements", "whatever");
 		}
 
-		partial void StartSessionButton_TouchUpInside (UIButton sender)
+		async void StartSessionButton_TouchUpInside (object sender, EventArgs args)
 		{
-			Mint.SharedInstance.StartSession(
-				(MintResponseResult responseResult) => 
-				{
-					Debug.WriteLine("Start a new session {0}", 
-						responseResult.ResultState == MintResultState.OKResultState
-						? "Succeed" : "Failed");
-				});
+			MintResponseResult responseResult = await Mint.SharedInstance.StartSessionAsync ();
+
+			Debug.WriteLine("Start a new session {0}", 
+				responseResult.ResultState == MintResultState.OKResultState
+				? "Succeed" : "Failed");
 		}
 
-		partial void CloseSessionButton_TouchUpInside (UIButton sender)
+		async void CloseSessionButton_TouchUpInside (object sender, EventArgs args)
 		{
-			Mint.SharedInstance.CloseSession(
-				(MintLogResult logResult) => 
-				{
-					Debug.WriteLine("Log close active session request {0}",
-						logResult.ResultState == MintResultState.OKResultState
-						? "Succeed" : "Failed");
-				});
-		}
+			MintLogResult logResult = await Mint.SharedInstance.CloseSessionAsync ();
 
-//		partial void LogCustomTagEventButton_TouchUpInside (UIButton sender)
-//		{
-//			Mint.SharedInstance.LogEventWithTag("Log Custom Event Tag", 
-//				(MintLogResult logResult) =>
-//				{
-//					Debug.WriteLine("Log a custom event with tag {0}",
-//						logResult.ResultState == MintResultState.OKResultState
-//						? "Succeed" : "Failed");
-//				});
-//		}
-
-		partial void MintLogButton_TouchUpInside (UIButton sender)
-		{
-			throw new NotImplementedException ();
+			Debug.WriteLine("Log close active session request {0}",
+				logResult.ResultState == MintResultState.OKResultState
+				? "Succeed" : "Failed");
 		}
 			
 		#endregion
+	}
+
+	public class RxTermNSURLConnectionDelegate : NSUrlConnectionDelegate
+	{
+		StringBuilder _ResponseBuilder;
+		public bool IsFinishedLoading { get; set; }
+		public string ResponseContent { get; set; }
+
+		public RxTermNSURLConnectionDelegate()
+			: base()
+		{
+			_ResponseBuilder = new StringBuilder();
+		}
+
+		public override void ReceivedData(NSUrlConnection connection, NSData data)
+		{
+			if(data != null) {
+				_ResponseBuilder.Append(data.ToString());
+			}
+		}
+		public override void FinishedLoading(NSUrlConnection connection)
+		{
+			IsFinishedLoading = true;
+			ResponseContent = _ResponseBuilder.ToString();
+		}
 	}
 }
 

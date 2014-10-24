@@ -30,6 +30,8 @@ namespace SplunkMintiOS.ClientApp
 
 			if (Debugger.IsAttached) Mint.SharedInstance.DisableCrashReporter ();
 
+//			Mint.SharedInstance.DisableNetworkMonitoring ();
+
 			Mint.SharedInstance.InitAndStartSession ("bc7388ee");
 
 			return true;

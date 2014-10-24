@@ -6,10 +6,10 @@
     <ProjectTypeGuids>{F5B4F3BC-B597-4E2B-B552-EF5D8A32436F};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{9725B78E-A3C0-4F65-ADAE-0392BBB670FA}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>SplunkMint.XamariniOS</RootNamespace>
+    <RootNamespace>SplunkMint</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>SplunkMint.Xamarin-iOS</AssemblyName>
-    <ReleaseVersion>1.0</ReleaseVersion>
+    <ReleaseVersion>1.0.0.0</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <Description>SplunkMint-iOS Objective-C bindings</Description>
   </PropertyGroup>
