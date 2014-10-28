@@ -258,8 +258,13 @@ namespace SplunkMintiOS.ClientApp
 			sessionConfig.TimeoutIntervalForResource = 60.0;
 			sessionConfig.HttpMaximumConnectionsPerHost = 1;
 
+			NSUrl url = NSUrl.FromString (URLRequestBin);
+			NSMutableUrlRequest urlRequest = new NSMutableUrlRequest (url, NSUrlRequestCachePolicy.ReloadIgnoringLocalCacheData, 60.0);
+			urlRequest.HttpMethod = "POST";
+			urlRequest.Body = NSData.FromString ("data=This is some NSURLSession data");
+
 			NSUrlSession session = NSUrlSession.FromConfiguration(sessionConfig);
-			NSUrlSessionDataTask dataTask = session.CreateDataTask (NSUrl.FromString (URLRequestBin));
+			NSUrlSessionDataTask dataTask = session.CreateDataTask (urlRequest);
 			dataTask.Resume ();
 		}
 
@@ -324,13 +329,8 @@ namespace SplunkMintiOS.ClientApp
 
 			RxTermNSURLConnectionDelegate connectionDelegate = new RxTermNSURLConnectionDelegate();
 
-			// There's a known bug currently in progress and we can't intercept NSURLConnection calls initialized without the startImmediately parameter.
-			// This will not work
 			NSUrlConnection aConnection = new NSUrlConnection(request, connectionDelegate);
 			aConnection.Start();
-
-			// But this works normally and your network call will be intercepted.
-			NSUrlConnection connection = new NSUrlConnection(request, connectionDelegate, true);
 		}
 
 		#endregion
