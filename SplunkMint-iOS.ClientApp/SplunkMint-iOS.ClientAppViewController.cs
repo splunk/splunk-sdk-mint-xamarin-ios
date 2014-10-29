@@ -46,7 +46,8 @@ namespace SplunkMintiOS.ClientApp
 			if (session == null)
 				session = InitBackgroundSession ();
 
-			LogHandledExceptionButton.TouchUpInside += LogHandledExceptionButton_TouchUpInside;
+			LogHandledException1Button.TouchUpInside += LogHandledException1Button_TouchUpInside;
+			LogHandledException2Button.TouchUpInside += LogHandledException2Button_TouchUpInside;
 			WebRequestButton.TouchUpInside += WebRequestRestPostButton_TouchUpInside;
 			HTTPClientButton.TouchUpInside += HttpClientRestPostButton_TouchUpInside;
 			LogEventWithTagButton.TouchUpInside += LogLevelEventButton_TouchUpInside;
@@ -54,7 +55,7 @@ namespace SplunkMintiOS.ClientApp
 			StartSessionButton.TouchUpInside += StartSessionButton_TouchUpInside;
 			CloseSessionButton.TouchUpInside += CloseSessionButton_TouchUpInside;
 			FlushButton.TouchUpInside += FlushButton_TouchUpInside;
-			StartSessionButton.TouchUpInside += StartTransactionButton_TouchUpInside;
+			StartTransactionButton.TouchUpInside += StartTransactionButton_TouchUpInside;
 			StopTransactionButton.TouchUpInside += StopTransactionButton_TouchUpInside;
 			NSUrlSessionButton.TouchUpInside += NSUrlSessionButton_TouchUpInside;
 			NSUrlConnectionButton.TouchUpInside += NSUrlConnectionButton_TouchUpInside;
@@ -139,7 +140,7 @@ namespace SplunkMintiOS.ClientApp
 
 		#region Log Handled Exception
 
-		async void LogHandledExceptionButton_TouchUpInside (object sender, EventArgs args)
+		async void LogHandledException1Button_TouchUpInside (object sender, EventArgs args)
 		{
 			try
 			{
@@ -150,7 +151,20 @@ namespace SplunkMintiOS.ClientApp
 				LimitedExtraDataList extraDataList = new LimitedExtraDataList ();
 				extraDataList.AddWithKey ("HandledExceptionKey1", "HandledExceptionValue1");
 				MintLogResult logResult = await Mint.SharedInstance.LogExceptionAsync (ex.ToSplunkNSException(), extraDataList);
-//				MintLogResult logResult = await Mint.SharedInstance.LogExceptionAsync (ex.ToSplunkNSException (), "Key1", "Value1");
+
+				Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
+			}
+		}
+
+		async void LogHandledException2Button_TouchUpInside (object sender, EventArgs args)
+		{
+			try
+			{
+				throw new NullReferenceException("This is a purposed NullReference handled exception");
+			}
+			catch (Exception ex)
+			{
+				MintLogResult logResult = await Mint.SharedInstance.LogExceptionAsync (ex.ToSplunkNSException (), "Key1", "Value1");
 
 				Debug.WriteLine("Logged Exception Request: {0}", logResult.ClientRequest);
 			}
@@ -160,7 +174,7 @@ namespace SplunkMintiOS.ClientApp
 
 		#region Transactions
 
-		private const string TransactionId = "SplunkMintXamarinTransaction";
+		private string TransactionId = "SplunkMintXamarinTransaction - " + Guid.NewGuid().ToString();
 
 		async void StartTransactionButton_TouchUpInside (object sender, EventArgs args)
 		{
@@ -175,7 +189,7 @@ namespace SplunkMintiOS.ClientApp
 		{
 			TransactionStopResult transactionStopResult = await Mint.SharedInstance.TransactionStopAsync (TransactionId); 
 
-			Debug.WriteLine("Transaction Stopped {0} eith ID {1}",
+			Debug.WriteLine("Transaction Stopped {0} with ID {1}",
 				transactionStopResult.TransactionStatus == TransactionStatus.UserSuccessfullyStoppedTransaction
 				? "Successfully" : "Failed", TransactionId);
 		}

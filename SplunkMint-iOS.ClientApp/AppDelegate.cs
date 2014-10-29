@@ -31,9 +31,10 @@ namespace SplunkMintiOS.ClientApp
 			// NOTE: Don't call the base implementation on a Model class
 			// see http://docs.xamarin.com/guides/ios/application_fundamentals/delegates,_protocols,_and_events
 
-			if (Debugger.IsAttached) Mint.SharedInstance.DisableCrashReporter ();
-
-//			Mint.SharedInstance.DisableNetworkMonitoring ();
+			// Always add this line of code before InitAndStartSession for Xamarin iOS
+			if (Debugger.IsAttached) {
+				Mint.SharedInstance.DisableCrashReporter ();
+			}
 
 			Mint.SharedInstance.InitAndStartSession ("bc7388ee");
 

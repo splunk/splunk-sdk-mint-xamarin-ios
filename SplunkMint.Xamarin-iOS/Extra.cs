@@ -15,7 +15,7 @@ namespace SplunkMint
 		{
 			NSMutableDictionary dictionary = new NSMutableDictionary ();
 			dictionary.SetValueForKey (
-				NSObject.FromObject(NSString.FromData(NSData.FromString(exception.StackTrace), NSStringEncoding.UTF8)), 
+				NSObject.FromObject(NSString.FromData(NSData.FromString(exception.StackTrace.Trim()), NSStringEncoding.UTF8)), 
 				NSString.FromData(NSData.FromString("SplunkMint-Xamarin-Exception-Stacktrace"), NSStringEncoding.UTF8));
 
 			string[] messages = exception.Message.Split (new [] { '\n' }, 1, StringSplitOptions.RemoveEmptyEntries);

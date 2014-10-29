@@ -32,7 +32,11 @@ namespace SplunkMintiOS.ClientApp
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
-		UIButton LogHandledExceptionButton { get; set; }
+		UIButton LogHandledException1Button { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton LogHandledException2Button { get; set; }
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
@@ -100,9 +104,13 @@ namespace SplunkMintiOS.ClientApp
 				LogEventWithTagButton.Dispose ();
 				LogEventWithTagButton = null;
 			}
-			if (LogHandledExceptionButton != null) {
-				LogHandledExceptionButton.Dispose ();
-				LogHandledExceptionButton = null;
+			if (LogHandledException1Button != null) {
+				LogHandledException1Button.Dispose ();
+				LogHandledException1Button = null;
+			}
+			if (LogHandledException2Button != null) {
+				LogHandledException2Button.Dispose ();
+				LogHandledException2Button = null;
 			}
 			if (ModernHttpClientButton != null) {
 				ModernHttpClientButton.Dispose ();

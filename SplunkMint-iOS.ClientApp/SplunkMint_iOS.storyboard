@@ -17,7 +17,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="9" translatesAutoresizingMaskIntoConstraints="NO" misplaced="YES">
-                                <rect key="frame" x="70" y="60" width="184" height="30"/>
+                                <rect key="frame" x="68" y="60" width="184" height="30"/>
                                 <state key="normal" title="NotImplementedException">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
@@ -57,8 +57,8 @@
                                 </state>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="18" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="23" y="174" width="273" height="30"/>
-                                <state key="normal" title="Log Handled Exception">
+                                <rect key="frame" x="23" y="174" width="109" height="30"/>
+                                <state key="normal" title="Handled 1">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
@@ -152,6 +152,12 @@
                                     <action selector="Start:" destination="5" id="86" eventType="touchUpInside"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="90" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="182" y="174" width="90" height="30"/>
+                                <state key="normal" title="Handled 2">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint id="46" firstItem="6" firstAttribute="trailing" secondItem="9" secondAttribute="trailing" constant="66"/>
@@ -161,7 +167,7 @@
                     <connections>
                         <outlet property="WebRequestButton" destination="16" id="name-outlet-16"/>
                         <outlet property="HTTPClientButton" destination="17" id="name-outlet-17"/>
-                        <outlet property="LogHandledExceptionButton" destination="18" id="name-outlet-18"/>
+                        <outlet property="LogHandledException1Button" destination="18" id="name-outlet-18"/>
                         <outlet property="LogEventWithTagButton" destination="19" id="name-outlet-19"/>
                         <outlet property="ModernHttpClientButton" destination="39" id="name-outlet-39"/>
                         <outlet property="StartSessionButton" destination="27" id="name-outlet-27"/>
@@ -171,6 +177,7 @@
                         <outlet property="StopTransactionButton" destination="13" id="name-outlet-13"/>
                         <outlet property="NSUrlSessionButton" destination="59" id="name-outlet-59"/>
                         <outlet property="NSUrlConnectionButton" destination="64" id="name-outlet-64"/>
+                        <outlet property="LogHandledException2Button" destination="90" id="name-outlet-90"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7" userLabel="First Responder" sceneMemberID="firstResponder"/>
