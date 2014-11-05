@@ -9,8 +9,16 @@ namespace SplunkMint
 {
 	#region NSException extension class
 
+	/// <summary>
+	/// An extensions static class.
+	/// </summary>
 	public static class Extensions
 	{
+		/// <summary>
+		/// Helper System.Exception extension method.
+		/// </summary>
+		/// <returns>The Splunk>MINT NSException.</returns>
+		/// <param name="exception">The System.Exception.</param>
 		public static NSException ToSplunkNSException(this Exception exception)
 		{
 			NSMutableDictionary dictionary = new NSMutableDictionary ();

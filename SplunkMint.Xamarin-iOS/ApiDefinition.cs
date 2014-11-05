@@ -249,21 +249,46 @@ namespace SplunkMint
 		void MergeFromDictionary (NSDictionary dict, bool useKeyMapping);
 	}
 
+	/// <summary>
+	/// Used to create a custom extra data instance with key and value properties to attach in every request.
+	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface ExtraData {
 
+		/// <summary>
+		/// Gets or sets the key.
+		/// </summary>
+		/// <value>The key.</value>
 		[Export ("key", ArgumentSemantic.Retain)]
 		string Key { get; set; }
 
+		/// <summary>
+		/// Gets or sets the value.
+		/// </summary>
+		/// <value>The value.</value>
 		[Export ("value", ArgumentSemantic.Retain)]
 		string Value { get; set; }
 
+		/// <summary>
+		/// Gets the maximum length of the value.
+		/// </summary>
+		/// <value>The length of the max value.</value>
 		[Export ("maxValueLength", ArgumentSemantic.Assign)]
 		NSNumber MaxValueLength { get; set; }
 
+		/// <summary>
+		/// Constructor with the specified key and value.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <param name="value">Value.</param>
 		[Export ("initWithKey:andValue:")]
 		IntPtr Constructor (string key, string value);
 
+		/// <summary>
+		/// Determines whether this instance is equal to extra data for specified extraData.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is equal to extra data the specified extraData; otherwise, <c>false</c>.</returns>
+		/// <param name="extraData">Extra data.</param>
 		[Export ("isEqualToExtraData:")]
 		bool IsEqualToExtraData (ExtraData extraData);
 	}
@@ -338,129 +363,282 @@ namespace SplunkMint
 		NSMutableDictionary ExtraData { get; set; }
 	}
 
+	/// <summary>
+	/// Holds a limited number of 32 ExtraData instances.
+	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface LimitedExtraDataList {
 
+		/// <summary>
+		/// Gets the maximum count of ExtraData instances.
+		/// </summary>
+		/// <value>The maximum count.</value>
 		[Export ("maxCount")]
 		uint MaxCount { get; set; }
 
+		/// <summary>
+		/// Gets the count of ExtraData instances of the list.
+		/// </summary>
+		/// <value>The count of ExtraData instances.</value>
 		[Export ("count")]
 		uint Count { get; set; }
 
+		/// <summary>
+		/// Gets the internal ExtraData instances array.
+		/// </summary>
+		/// <value>The ExtraData array.</value>
 		[Export ("extraDataArray", ArgumentSemantic.Retain)]
 		NSMutableArray ExtraDataArray { get; set; }
 
 		[Static, Export ("addExtraDataToDataFixture:")]
 		void AddExtraDataToDataFixture (DataFixture dataFixture);
 
+		/// <summary>
+		/// Gets the singleton shared instance.
+		/// </summary>
+		/// <value>The singleton shared instance.</value>
 		[Static, Export ("sharedInstance")]
 		LimitedExtraDataList SharedInstance { get; }
 
+		/// <summary>
+		/// Add the specified ExtraData.
+		/// </summary>
+		/// <param name="extraData">The ExtraData.</param>
 		[Export ("add:")]
 		void Add (ExtraData extraData);
 
+		/// <summary>
+		/// Remove the specified ExtraData.
+		/// </summary>
+		/// <param name="extraData">The ExtraData.</param>
 		[Export ("remove:")]
 		void Remove (ExtraData extraData);
 
+		/// <summary>
+		/// Adds an ExtraData instance to the array with key and value.
+		/// </summary>
+		/// <param name="key">Key.</param>
+		/// <param name="value">Value.</param>
 		[Export ("addWithKey:andValue:")]
 		void AddWithKey (string key, string value);
 
+		/// <summary>
+		/// Removes the ExtraData instance with specified key.
+		/// </summary>
+		/// <param name="key">Key.</param>
 		[Export ("removeWithKey:")]
 		void RemoveWithKey (string key);
 
+		/// <summary>
+		/// Returns the index of the specified ExtraData in the internal array.
+		/// </summary>
+		/// <returns>The of.</returns>
+		/// <param name="extraData">Extra data.</param>
 		[Export ("indexOf:")]
 		int IndexOf (ExtraData extraData);
 
+		/// <summary>
+		/// Inserts an ExtraData instance to the specified index of the internal array.
+		/// </summary>
+		/// <param name="index">Index.</param>
+		/// <param name="extraData">ExtraData.</param>
 		[Export ("insertAtIndex:extraData:")]
 		void InsertAtIndex (uint index, ExtraData extraData);
 
+		/// <summary>
+		/// Removes the ExtraData instance in the specified index of the internal array.
+		/// </summary>
+		/// <param name="index">Index.</param>
 		[Export ("removeAtIndex:")]
 		void RemoveAtIndex (uint index);
 
+		/// <summary>
+		/// Clear all the ExtraData instance of the array.
+		/// </summary>
 		[Export ("clear")]
 		void Clear ();
 
+		/// <summary>
+		/// Contains the specified ExtraData.
+		/// </summary>
+		/// <param name="extraData">ExtraData.</param>
 		[Export ("contains:")]
 		bool Contains (ExtraData extraData);
 	}
-		
+
+	/// <summary>
+	/// A custom NSException derived class.
+	/// </summary>
 	[BaseType (typeof (NSException))]
 	public partial interface MintMessageException {
 
+		/// <summary>
+		/// Constructor with specified name, reason and userInfo.
+		/// </summary>
+		/// <param name="aName">A name.</param>
+		/// <param name="aReason">A reason.</param>
+		/// <param name="aUserInfo">A user info dictionary.</param>
 		[Export ("initWithName:reason:userInfo:")]
 		IntPtr Constructor (string aName, string aReason, NSDictionary aUserInfo);
 	}
 
+	/// <summary>
+	/// Base type used to return information to user actions.
+	/// </summary>
 	[BaseType (typeof (NSObject))]
 	public partial interface MintResult {
 
+		/// <summary>
+		/// The type of the request.
+		/// </summary>
+		/// <value>The type of the request.</value>
 		[Export ("requestType")]
 		MintRequestType RequestType { get; set; }
 
+		/// <summary>
+		/// The result description, if any.
+		/// </summary>
+		/// <value>The description.</value>
 		[Export ("description", ArgumentSemantic.Retain)]
 		string Description { get; set; }
 
+		/// <summary>
+		/// The state of the result.
+		/// </summary>
+		/// <value>The state of the result.</value>
 		[Export ("resultState")]
 		MintResultState ResultState { get; set; }
 
+		/// <summary>
+		/// The exception related to the result, if any.
+		/// </summary>
+		/// <value>The exception error.</value>
 		[Export ("exceptionError", ArgumentSemantic.Retain)]
 		MintMessageException ExceptionError { get; set; }
 
+		/// <summary>
+		/// The JSON model of the request.
+		/// </summary>
+		/// <value>The JSON request.</value>
 		[Export ("clientRequest", ArgumentSemantic.Retain)]
 		string ClientRequest { get; set; }
 
+		/// <summary>
+		/// Indicating whether the request is handled while debugging.
+		/// </summary>
+		/// <value><c>true</c> if handled while debugging; otherwise, <c>false</c>.</value>
 		[Export ("handledWhileDebugging")]
 		bool HandledWhileDebugging { get; set; }
 	}
 
+	/// <summary>
+	/// Return response information when an action is directly sent to the server.
+	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintResponseResult {
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value>The error identifier.</value>
 		[Export ("errorId", ArgumentSemantic.Retain)]
 		NSNumber ErrorId { get; set; }
 
+		/// <summary>
+		/// The server response description.
+		/// </summary>
+		/// <value>The server response.</value>
 		[Export ("serverResponse", ArgumentSemantic.Retain)]
 		string ServerResponse { get; set; }
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value>The URL.</value>
 		[Export ("url", ArgumentSemantic.Retain)]
 		string Url { get; set; }
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value>The content text.</value>
 		[Export ("contentText", ArgumentSemantic.Retain)]
 		string ContentText { get; set; }
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value>The ticker text.</value>
 		[Export ("tickerText", ArgumentSemantic.Retain)]
 		string TickerText { get; set; }
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value>The content title.</value>
 		[Export ("contentTitle", ArgumentSemantic.Retain)]
 		string ContentTitle { get; set; }
 
+		/// <summary>
+		/// Not applicable, deprecated.
+		/// </summary>
+		/// <value><c>true</c> if this instance is resolved; otherwise, <c>false</c>.</value>
 		[Export ("isResolved")]
 		bool IsResolved { get; set; }
 	}
 
+	/// <summary>
+	/// Return log information when an action is used to log a request.
+	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintLogResult {
 
+		/// <summary>
+		/// The type of the log.
+		/// </summary>
+		/// <value>The type of the log.</value>
 		[Export ("logType")]
 		MintLogType LogType { get; set; }
 	}
 
+	/// <summary>
+	/// Returned base instance for Transaction actions
+	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface TransactionResult {
 
+		/// <summary>
+		/// The transaction status.
+		/// </summary>
+		/// <value>The transaction status.</value>
 		[Export ("transactionStatus")]
 		TransactionStatus TransactionStatus { get; set; }
 
+		/// <summary>
+		/// A helper description.
+		/// </summary>
+		/// <value>The description.</value>
 		[Export ("description", ArgumentSemantic.Retain)]
 		string Description { get; set; }
 	}
 
+	/// <summary>
+	/// Base transaction class.
+	/// </summary>
 	[BaseType (typeof (DataFixture))]
 	public partial interface Transaction {
 
+		/// <summary>
+		/// The name of the transaction.
+		/// </summary>
+		/// <value>The name.</value>
 		[Export ("name", ArgumentSemantic.Retain)]
 		string Name { get; set; }
 
+		/// <summary>
+		/// The transaction identifier, for internal purposes.
+		/// </summary>
+		/// <value>The transaction identifier.</value>
 		[Export ("transactionId", ArgumentSemantic.Retain)]
 		string TransactionId { get; set; }
 	}
@@ -578,35 +756,69 @@ namespace SplunkMint
 		string SysMemThreshold { get; set; }
 	}
 
+	/// <summary>
+	/// The transaction start class.
+	/// </summary>
 	[BaseType (typeof (Transaction))]
 	public partial interface TrStart {
-
+	
 		[Static, Export ("getInstanceWithTransactionName:appEnvironment:andPerformance:")]
 		TrStart GetInstanceWithTransactionName (string transactionName, MintAppEnvironment anAppEnvironment, MintPerformance aPerformance);
 
+		/// <summary>
+		/// Determines whether this JSON model is a transaction start.
+		/// </summary>
+		/// <returns><c>true</c> if this instance is JSON transaction start; otherwise, <c>false</c>.</returns>
+		/// <param name="json">Json.</param>
 		[Static, Export ("isJSONTrStart:")]
 		bool IsJSONTrStart (string json);
 	}
 
+	/// <summary>
+	/// Returned class with information when you start a transaction
+	/// </summary>
 	[BaseType (typeof (TransactionResult))]
 	public partial interface TransactionStartResult {
 
+		/// <summary>
+		/// The transaction name.
+		/// </summary>
+		/// <value>The name of the transaction.</value>
 		[Export ("transactionName", ArgumentSemantic.Retain)]
 		string TransactionName { get; set; }
 
+		/// <summary>
+		/// The TrStart instance object.
+		/// </summary>
+		/// <value>The TrStart instance object.</value>
 		[Export ("transactionStart", ArgumentSemantic.Retain)]
 		TrStart TransactionStart { get; set; }
 	}
 
+	/// <summary>
+	/// The tranaction stop class.
+	/// </summary>
 	[BaseType (typeof (Transaction))]
 	public partial interface TrStop {
 
+		/// <summary>
+		/// The duration of the transaction since it started in milliseconds.
+		/// </summary>
+		/// <value>The duration.</value>
 		[Export ("duration", ArgumentSemantic.Retain)]
 		NSNumber Duration { get; set; }
 
+		/// <summary>
+		/// The status of the transaction.
+		/// </summary>
+		/// <value>The status.</value>
 		[Export ("status", ArgumentSemantic.Retain)]
 		string Status { get; set; }
 
+		/// <summary>
+		/// Reason if cancelled.
+		/// </summary>
+		/// <value>The reason.</value>
 		[Export ("reason", ArgumentSemantic.Retain)]
 		string Reason { get; set; }
 
@@ -614,12 +826,23 @@ namespace SplunkMint
 		TrStop GetInstanceWithTransactionId (string transactionId, string transactionName, MintAppEnvironment anAppEnvironment, NSNumber aDuration, string aReason, string aCompletedStatus);
 	}
 
+	/// <summary>
+	/// Return instance for transaction stop/cancel actions.
+	/// </summary>
 	[BaseType (typeof (TransactionResult))]
 	public partial interface TransactionStopResult {
 
+		/// <summary>
+		/// The reason of the transaction when stopped or cancelled.
+		/// </summary>
+		/// <value>The reason.</value>
 		[Export ("reason", ArgumentSemantic.Retain)]
 		string Reason { get; set; }
 
+		/// <summary>
+		/// The tranaction stop instance.
+		/// </summary>
+		/// <value>The transaction stop.</value>
 		[Export ("transactionStop", ArgumentSemantic.Retain)]
 		TrStop TransactionStop { get; set; }
 	}
@@ -852,75 +1075,166 @@ namespace SplunkMint
 		MintInternalRequest Request { get; set; }
 	}
 
+	/// <summary>
+	/// Network data class.
+	/// </summary>
 	[BaseType (typeof (DataFixture))]
 	public partial interface NetworkDataFixture {
 
+		/// <summary>
+		/// The URL of the network call.
+		/// </summary>
+		/// <value>The URL.</value>
 		[Export ("url", ArgumentSemantic.Retain)]
 		string Url { get; set; }
 
+		/// <summary>
+		/// The protocol schema of the network call.
+		/// </summary>
+		/// <value>The protocol.</value>
 		[Export ("protocol", ArgumentSemantic.Retain)]
 		string Protocol { get; set; }
 
+		/// <summary>
+		/// The end time of the network call.
+		/// </summary>
+		/// <value>The end time.</value>
 		[Export ("endTime", ArgumentSemantic.Retain)]
 		NSNumber EndTime { get; set; }
 
+		/// <summary>
+		/// The duration of the network call.
+		/// </summary>
+		/// <value>The duration.</value>
 		[Export ("duration", ArgumentSemantic.Retain)]
 		NSNumber Duration { get; set; }
 
+		/// <summary>
+		/// The response status code.
+		/// </summary>
+		/// <value>The status code.</value>
 		[Export ("statusCode", ArgumentSemantic.Retain)]
 		NSNumber StatusCode { get; set; }
 
+		/// <summary>
+		/// The request content length.
+		/// </summary>
+		/// <value>The length.</value>
 		[Export ("contentLength", ArgumentSemantic.Retain)]
 		NSNumber ContentLength { get; set; }
 
+		/// <summary>
+		/// The request length.
+		/// </summary>
+		/// <value>The length.</value>
 		[Export ("requestLength", ArgumentSemantic.Retain)]
 		NSNumber RequestLength { get; set; }
 
+		/// <summary>
+		/// Indicating whether the network call is failed.
+		/// </summary>
+		/// <value><c>true</c> if failed; otherwise, <c>false</c>.</value>
 		[Export ("failed")]
 		bool Failed { get; set; }
 
+		/// <summary>
+		/// The request headers.
+		/// </summary>
+		/// <value>The request headers.</value>
 		[Export ("reqHeaders", ArgumentSemantic.Retain)]
 		NSMutableDictionary ReqHeaders { get; set; }
 
+		/// <summary>
+		/// The response headers.
+		/// </summary>
+		/// <value>The resp headers.</value>
 		[Export ("respHeaders", ArgumentSemantic.Retain)]
 		NSMutableDictionary RespHeaders { get; set; }
 
+		/// <summary>
+		/// If any exception is thrown.
+		/// </summary>
+		/// <value>The exception.</value>
 		[Export ("exception", ArgumentSemantic.Retain)]
 		string Exception { get; set; }
 
+		/// <summary>
+		/// The response length.
+		/// </summary>
+		/// <value>The length of the response.</value>
 		[Export ("responseLength", ArgumentSemantic.Retain)]
 		NSNumber ResponseLength { get; set; }
 
+		/// <summary>
+		/// The latency of the network call.
+		/// </summary>
+		/// <value>The latency.</value>
 		[Export ("latency", ArgumentSemantic.Retain)]
 		string Latency { get; set; }
 
+		/// <summary>
+		/// Helper method to append the status code to the instance.
+		/// </summary>
+		/// <param name="statusCode">Status code.</param>
 		[Export ("appendWithStatusCode:")]
 		void AppendWithStatusCode (NSNumber statusCode);
 
+		/// <summary>
+		/// Helper method to append the start time of the network call.
+		/// </summary>
 		[Export ("appendStartTime")]
 		void AppendStartTime ();
 
+		/// <summary>
+		/// Helper method to append the end time of the network call.
+		/// </summary>
 		[Export ("appendEndTime")]
 		void AppendEndTime ();
 
+		/// <summary>
+		/// Helper method to append the NSUrlRequest information.
+		/// </summary>
+		/// <param name="request">Request.</param>
 		[Export ("appendRequestInfo:")]
 		void AppendRequestInfo (NSUrlRequest request);
 
+		/// <summary>
+		/// Helper method to append the NSUrlResponse information.
+		/// </summary>
+		/// <param name="response">Response.</param>
 		[Export ("appendResponseInfo:")]
 		void AppendResponseInfo (NSUrlResponse response);
 
+		/// <summary>
+		/// Helper method to append the data returned from the server.
+		/// </summary>
+		/// <param name="data">Data.</param>
 		[Export ("appendResponseData:")]
 		void AppendResponseData (NSData data);
 
+		/// <summary>
+		/// Helper method to append the response data size.
+		/// </summary>
+		/// <param name="dataSize">Data size.</param>
 		[Export ("appendResponseDataSize:")]
 		void AppendResponseDataSize (uint dataSize);
 
+		/// <summary>
+		/// Helper method to append any error that is happened.
+		/// </summary>
+		/// <param name="error">Error.</param>
 		[Export ("appendWithError:")]
 		void AppendWithError (NSError error);
 
+		/// <summary>
+		/// Helper method to append the global extra data, if any.
+		/// </summary>
 		[Export ("appendGlobalExtraData")]
 		void AppendGlobalExtraData ();
 
+		/// <summary>
+		/// For debugging purposes, prints main properties to the console.
+		/// </summary>
 		[Export ("debugPrint")]
 		void DebugPrint ();
 	}
@@ -972,9 +1286,16 @@ namespace SplunkMint
 		string ErrorContentType { get; }
 	}
 
+	/// <summary>
+	/// Logged request event arguments.
+	/// </summary>
 	[BaseType (typeof (NSObject))]
 	public partial interface LoggedRequestEventArgs {
 
+		/// <summary>
+		/// The result information.
+		/// </summary>
+		/// <value>The response result.</value>
 		[Export ("responseResult", ArgumentSemantic.Retain)]
 		MintResponseResult ResponseResult { get; set; }
 	}
@@ -1105,37 +1426,71 @@ namespace SplunkMint
 		bool HandledSuccessfully { get; set; }
 	}
 
+	/// <summary>
+	/// Mint notification delegate.
+	/// </summary>
 	[Model, BaseType (typeof (NSObject))]
 	[Protocol]
 	public partial interface MintNotificationDelegate {
 
+		/// <summary>
+		/// Provides you with the related information when the cached requests are sent to the server.
+		/// </summary>
+		/// <param name="args">Logged request informationa arguments.</param>
 		[Export ("loggedRequestHandled:")]
 		void CachedRequestsSent (LoggedRequestEventArgs args);
 
+		/// <summary>
+		/// Provide network data infromation of the call that intercepted.
+		/// </summary>
+		/// <param name="networkData">The network data.</param>
 		[Export ("networkDataLogged:")]
 		void NetworkDataIntercepted (NetworkDataFixture networkData);
 	}
 
 //	, Delegates=new string [] {"WeakDelegate"},
 //	Events=new Type [] { typeof (MintNotificationDelegate) }
+	/// <summary>
+	/// The Splunk>MINT base class
+	/// </summary>
 	[BaseType (typeof (NSObject), Delegates=new string [] {"WeakDelegate"}, Events=new Type [] { typeof (MintNotificationDelegate) })]
 	public partial interface BugSenseBase : RequestWorkerDelegate {
 
 		[Export ("splunkRequestWorker", ArgumentSemantic.Retain)]
 		RequestWorkerFacadeDelegate SplunkRequestWorker { get; set; }
 
+		/// <summary>
+		/// Whether the plugin is initiaized.
+		/// </summary>
+		/// <value><c>true</c> if this instance is initialized; otherwise, <c>false</c>.</value>
 		[Export ("isInitialized")]
 		bool IsInitialized { get; set; }
 
+		/// <summary>
+		/// If the session is active.
+		/// </summary>
+		/// <value><c>true</c> if this instance is session active; otherwise, <c>false</c>.</value>
 		[Export ("isSessionActive")]
 		bool IsSessionActive { get; set; }
 
+		/// <summary>
+		/// The user identifier.
+		/// </summary>
+		/// <value>The user identifier.</value>
 		[Export ("userIdentifier", ArgumentSemantic.Retain)]
 		string UserIdentifier { get; set; }
 
+		/// <summary>
+		/// Indicating whether Splunk>MINT will handle requests while debugging.
+		/// </summary>
+		/// <value><c>true</c> if handle while debugging; otherwise, <c>false</c>.</value>
 		[Export ("handleWhileDebugging")]
 		bool HandleWhileDebugging { get; set; }
 
+		/// <summary>
+		/// The LimitedExtraDataList global instance.
+		/// </summary>
+		/// <value>The extra data list.</value>
 		[Export ("extraDataList", ArgumentSemantic.Retain)]
 		LimitedExtraDataList ExtraDataList { get; set; }
 
@@ -1150,61 +1505,127 @@ namespace SplunkMint
 		[Export ("initWithRequestWorker:")]
 		IntPtr Constructor (RequestWorkerFacadeDelegate requestWorker);
 
+		/// <summary>
+		/// Disables the crash reporter.
+		/// </summary>
 		[Export ("disableCrashReporter")]
 		void DisableCrashReporter ();
 
+		/// <summary>
+		/// Flushes all the cached requests logged to the server.
+		/// </summary>
 		[Export ("flushAsyncWithBlock:")]
 		[Async]
 		void Flush (ResponseResultBlock resultBlock);
 
+		/// <summary>
+		/// Initializes the plugin and starts a new session.
+		/// </summary>
+		/// <param name="apiKey">API key.</param>
 		[Export ("initAndStartSession:")]
 		void InitAndStartSession (string apiKey);
 
+		/// <summary>
+		/// Adds an ExtraData instance to the global LimitedExtraDataList.
+		/// </summary>
+		/// <param name="extraData">Extra data.</param>
 		[Export ("addExtraData:")]
 		void AddExtraData (ExtraData extraData);
 
+		/// <summary>
+		/// Adds a LimitedExtraDataList instance with appending the ExtraData instance to the global LimitedExtraDataList.
+		/// </summary>
+		/// <param name="limitedExtraDataList">Limited extra data list.</param>
 		[Export ("addExtraDataList:")]
 		void AddExtraDataList (LimitedExtraDataList limitedExtraDataList);
 
+		/// <summary>
+		/// Removes an ExtraData instance with the specified key.
+		/// </summary>
+		/// <returns><c>true</c>, if extra data with key was removed, <c>false</c> otherwise.</returns>
+		/// <param name="key">Key.</param>
 		[Export ("removeExtraDataWithKey:")]
 		bool RemoveExtraDataWithKey (string key);
 
+		/// <summary>
+		/// Clears the global LimitedExtraDataList ExtraData instances.
+		/// </summary>
 		[Export ("clearExtraData")]
 		void ClearExtraData ();
 
+		/// <summary>
+		/// Appends a breadcrumb to the global breadcrumbs list.
+		/// </summary>
+		/// <param name="crumb">The Breadcrumb.</param>
 		[Export ("leaveBreadcrumb:")]
 		void LeaveBreadcrumb (string crumb);
 
+		/// <summary>
+		/// Clears the breadcrumbs from the global list.
+		/// </summary>
 		[Export ("clearBreadcrumbs")]
 		void ClearBreadcrumbs ();
 
+		/// <summary>
+		/// Logs an event with tag.
+		/// </summary>
+		/// <param name="tag">The tag event.</param>
+		/// <param name="completed">The completed callback.</param>
 		[Export ("logEventAsyncWithTag:completionBlock:")]
 		[Async]
 		void LogEventWithTag (string tag, [NullAllowed] LogResultBlock completed);
 
+		/// <summary>
+		/// Starts a new session.
+		/// </summary>
+		/// <param name="completed">The completed callback.</param>
 		[Export ("startSessionAsyncWithCompletionBlock:")]
 		[Async]
 		void StartSession ([NullAllowed] ResponseResultBlock completed);
 
+		/// <summary>
+		/// Close the active session.
+		/// </summary>
+		/// <param name="completed">The completed callback.</param>
 		[Export ("closeSessionAsyncWithCompletionBlock:")]
 		[Async]
 		void CloseSession ([NullAllowed] LogResultBlock completed);
 
+		/// <summary>
+		/// Logs a handled exception with extra data key-value.
+		/// </summary>
+		/// <param name="exception">The NSException instance.</param>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value.</param>
+		/// <param name="completed">The completed callback.</param>
 		[Export ("logExceptionAsync:extraDataKey:extraDataValue:completionBlock:")]
 		[Async]
 		void LogException (NSException exception, string key, string value, [NullAllowed] LogResultBlock completed);
 
+		/// <summary>
+		/// Logs a handled exception with a LimitedExtraDataList instance.
+		/// </summary>
+		/// <param name="exception">The NSException instance.</param>
+		/// <param name="extraDataList">The LimitedExtraDataList.</param>
+		/// <param name="completed">The completed callback.</param>
 		[Export ("logExceptionAsync:limitedExtraDataList:completionBlock:")]
 		[Async]
 		void LogException (NSException exception, [NullAllowed] LimitedExtraDataList extraDataList, [NullAllowed] LogResultBlock completed);
 	}
 
+	/// <summary>
+	/// The base Splunk>MINT BugSense handler.
+	/// </summary>
 	[BaseType (typeof (BugSenseBase))]
 	public partial interface BugSense {
 
 //		[Export ("notificationDelegate", ArgumentSemantic.Assign)]
 //		MintNotificationDelegate NotificationDelegate { get; set; }
 
+		/// <summary>
+		/// The singleton shared instance.
+		/// </summary>
+		/// <value>The shared instance.</value>
 		[Static, Export ("sharedInstance")]
 		BugSense SharedInstance { get; }
 
@@ -1212,47 +1633,102 @@ namespace SplunkMint
 		IntPtr Constructor (RequestJsonSerializerDelegate jsonSerializer, ContentTypeDelegate contentTypeResolver, RequestWorkerFacadeDelegate requestWorker, ServiceClientDelegate serviceRepository);
 	}
 
+	/// <summary>
+	/// The base Splunk>MINT handler.
+	/// </summary>
 	[BaseType (typeof (BugSense))]
 	public partial interface MintBase {
 
+		/// <summary>
+		/// Disables the network monitoring.
+		/// </summary>
 		[Export ("disableNetworkMonitoring")]
 		void DisableNetworkMonitoring ();
 
+		/// <summary>
+		/// Gets the remote developer settings.
+		/// </summary>
+		/// <value>The developer settings.</value>
 		[Export ("getDevSettings")]
 		NSDictionary DevSettings { get; }
 
+		/// <summary>
+		/// Enables the logging of any debug message using the MintLog function.
+		/// </summary>
+		/// <param name="value">If set to <c>true</c> value.</param>
 		[Export ("enableMintLoggingCache:")]
 		void EnableLoggingCache (bool value);
 
+		/// <summary>
+		/// Enables the logging of the console output.
+		/// </summary>
+		/// <param name="value">If set to <c>true</c> value.</param>
 		[Export ("enableLogging:")]
 		void EnableLogging (bool value);
 
+		/// <summary>
+		/// Sets how many console lines to log.
+		/// </summary>
+		/// <param name="linesCount">Console lines count.</param>
 		[Export ("setLogging:")]
 		void SetLoggingLinesCount (int linesCount);
 
+		/// <summary>
+		/// Starts a transaction.
+		/// </summary>
+		/// <param name="transactionId">The transaction identifier.</param>
+		/// <param name="resultBlock">The completed callback.</param>
 		[Export ("transactionStart:andResultBlock:")]
 		[Async]
 		void TransactionStart (string transactionId, [NullAllowed] TransactionStartResultBlock resultBlock);
 
+		/// <summary>
+		/// Stops a transaction.
+		/// </summary>
+		/// <param name="transactionId">The transaction identifier.</param>
+		/// <param name="resultBlock">The completed callback.</param>
 		[Export ("transactionStop:andResultBlock:")]
 		[Async]
 		void TransactionStop (string transactionId, [NullAllowed] TransactionStopResultBlock resultBlock);
 
+		/// <summary>
+		/// Starts a transaction.
+		/// </summary>
+		/// <param name="transactionId">The transaction identifier.</param>
+		/// <param name="reason">The reason to cancel.</param>
+		/// <param name="resultBlock">The completed callback.</param>
 		[Export ("transactionCancel:reason:andResultBlock:")]
 		[Async]
 		void TransactionCancel (string transactionId, string reason, [NullAllowed] TransactionStopResultBlock resultBlock);
 
+		/// <summary>
+		/// Adds a URL to blacklist from network monitoring.
+		/// </summary>
+		/// <param name="url">The URL.</param>
 		[Export ("addURLToBlackList:")]
 		void AddURLToBlacklist (string url);
 
+		/// <summary>
+		/// Log an event with message and log level.
+		/// </summary>
+		/// <param name="message">The message.</param>
+		/// <param name="logLevel">The log level.</param>
+		/// <param name="resultBlock">The completed callback.</param>
 		[Export ("logEventAsyncWithName:logLevel:andCompletionBlock:")]
 		[Async]
 		void LogEventWithName (string message, MintLogLevel logLevel, [NullAllowed] LogResultBlock resultBlock); 
 	}
 
+	/// <summary>
+	/// The Splunk>MINT handler class.
+	/// </summary>
 	[BaseType (typeof (MintBase))]
 	public partial interface Mint {
 
+		/// <summary>
+		/// The singleton shared instance.
+		/// </summary>
+		/// <value>The shared instance.</value>
 		[Static, Export ("sharedInstance")]
 		Mint SharedInstance { get; }
 	}
