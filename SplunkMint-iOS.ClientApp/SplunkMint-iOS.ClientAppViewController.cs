@@ -12,6 +12,7 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using ModernHttpClient;
+using SplunkMint.XamarinExtensionsiOS;
 
 namespace SplunkMintiOS.ClientApp
 {
@@ -198,7 +199,7 @@ namespace SplunkMintiOS.ClientApp
 
 		#region Network Monitoring
 
-		private const string URLRequestBin = "http://requestb.in/19qubyi1";
+		private const string URLRequestBin = "http://requestb.in/1i7iv181";
 
 		#region Not Supported Network Monitoring APIs - Present to prove that the application continues to works properly
 
@@ -288,7 +289,7 @@ namespace SplunkMintiOS.ClientApp
 			{
 				using (HttpClientHandler handler = new HttpClientHandler())
 				{
-					SplunkInterceptionHttpHandler interceptionHandler = new SplunkInterceptionHttpHandler(handler);
+					MintHttpHandler interceptionHandler = new MintHttpHandler(handler);
 					HttpClient httpClient = new HttpClient(interceptionHandler);
 					StringContent dataStringContent = new StringContent("Sample Text Data for HttpClient!");
 					dataStringContent.Headers.ContentType = new MediaTypeHeaderValue("text/plain");
@@ -316,8 +317,8 @@ namespace SplunkMintiOS.ClientApp
 
 		async void ModernHttpClientButton_TouchUpInside (object sender, EventArgs e)
 		{
-			// Use SplunkInterceptionHttpHandler to intercept your networking REST calls
-			SplunkInterceptionHttpHandler interceptionHandler = new SplunkInterceptionHttpHandler(new NativeMessageHandler());
+			// Use MintHttpHandler to intercept your networking REST calls
+			MintHttpHandler interceptionHandler = new MintHttpHandler(new NativeMessageHandler());
 			HttpClient httpClient = new HttpClient (interceptionHandler);
 			HttpResponseMessage responseMessage = await httpClient.PostAsync(URLRequestBin, new StringContent("Just A Test"));
 

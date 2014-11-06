@@ -626,7 +626,7 @@ namespace SplunkMint
 	/// Base transaction class.
 	/// </summary>
 	[BaseType (typeof (DataFixture))]
-	public partial interface Transaction {
+	public partial interface SPLTransaction {
 
 		/// <summary>
 		/// The name of the transaction.
@@ -759,7 +759,7 @@ namespace SplunkMint
 	/// <summary>
 	/// The transaction start class.
 	/// </summary>
-	[BaseType (typeof (Transaction))]
+	[BaseType (typeof (SPLTransaction))]
 	public partial interface TrStart {
 	
 		[Static, Export ("getInstanceWithTransactionName:appEnvironment:andPerformance:")]
@@ -798,7 +798,7 @@ namespace SplunkMint
 	/// <summary>
 	/// The tranaction stop class.
 	/// </summary>
-	[BaseType (typeof (Transaction))]
+	[BaseType (typeof (SPLTransaction))]
 	public partial interface TrStop {
 
 		/// <summary>
@@ -1237,6 +1237,12 @@ namespace SplunkMint
 		/// </summary>
 		[Export ("debugPrint")]
 		void DebugPrint ();
+
+		/// <summary>
+		/// For persisting to disk the NetworkDataFixture.
+		/// </summary>
+		[Export ("saveToDisk")]
+		void SaveToDisk ();
 	}
 
 	[Model, BaseType (typeof (NSObject))]
