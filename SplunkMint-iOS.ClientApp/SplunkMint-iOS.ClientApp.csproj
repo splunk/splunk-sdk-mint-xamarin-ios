@@ -121,10 +121,6 @@
       <Project>{9725B78E-A3C0-4F65-ADAE-0392BBB670FA}</Project>
       <Name>SplunkMint.Xamarin-iOS</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SplunkMint.XamarinExtensions-iOS\SplunkMint.XamarinExtensions-iOS.csproj">
-      <Project>{3F5C21DB-D598-4702-B66F-6820F63CC5C0}</Project>
-      <Name>SplunkMint.XamarinExtensions-iOS</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="SplunkMint_iOS.storyboard" />

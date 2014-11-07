@@ -12,7 +12,6 @@ using System.IO;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using ModernHttpClient;
-using SplunkMint.XamarinExtensionsiOS;
 
 namespace SplunkMintiOS.ClientApp
 {
