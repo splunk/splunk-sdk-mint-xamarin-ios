@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplunkMint.Xamarin-iOS", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplunkMint-iOS.ClientApp", "SplunkMint-iOS.ClientApp\SplunkMint-iOS.ClientApp.csproj", "{FF661664-93FA-4079-9979-A069C6610DAB}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SplunkMint.XamarinUnified-iOS", "SplunkMint.XamarinUnified-iOS\SplunkMint.XamarinUnified-iOS.csproj", "{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,22 @@ Global
 		{9725B78E-A3C0-4F65-ADAE-0392BBB670FA}.Release|iPhone.Build.0 = Release|Any CPU
 		{9725B78E-A3C0-4F65-ADAE-0392BBB670FA}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{9725B78E-A3C0-4F65-ADAE-0392BBB670FA}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|iPhone.Build.0 = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{EADFA8ED-B321-4C81-91C6-22AB4EEDAF39}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{FF661664-93FA-4079-9979-A069C6610DAB}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
 		{FF661664-93FA-4079-9979-A069C6610DAB}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
 		{FF661664-93FA-4079-9979-A069C6610DAB}.AppStore|iPhone.ActiveCfg = AppStore|iPhone

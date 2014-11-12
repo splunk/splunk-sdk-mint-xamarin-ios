@@ -1,10 +1,9 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhone" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneDeviceTarget.George's iPhone" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="SplunkMint.XamarinExtensions-iOS/MintHttpHandler.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="SplunkMint.Xamarin-iOS/Extra.cs">
     <Files>
-      <File FileName="SplunkMint-iOS.ClientApp/SplunkMint-iOS.ClientAppViewController.cs" Line="9" Column="9" />
-      <File FileName="SplunkMint.Xamarin-iOS/ApiDefinition.cs" Line="3" Column="3" />
-      <File FileName="SplunkMint.XamarinExtensions-iOS/MintHttpHandler.cs" Line="35" Column="35" />
+      <File FileName="SplunkMint-iOS.ClientApp/SplunkMint-iOS.ClientAppViewController.cs" Line="24" Column="24" />
+      <File FileName="SplunkMint.Xamarin-iOS/Extra.cs" Line="45" Column="45" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

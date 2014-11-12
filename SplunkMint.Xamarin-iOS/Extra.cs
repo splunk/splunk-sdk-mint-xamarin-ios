@@ -77,7 +77,10 @@ namespace SplunkMint
 			}
 
 			networkData.AppendEndTime (); 
-			networkData.AppendWithStatusCode (NSNumber.FromInt32 ((int)responseMessage.StatusCode));
+			int statusCode = (int)responseMessage.StatusCode;
+			NSNumber statusCodeNumber = NSNumber.FromInt32 (statusCode);
+			networkData.StatusCode = statusCodeNumber;
+			networkData.AppendWithStatusCode (statusCodeNumber);
 			byte[] receivedBytes = await responseMessage.Content.ReadAsByteArrayAsync();
 			networkData.ResponseLength = NSNumber.FromInt32 (receivedBytes.Length);
 			if (exceptionCaughtMessage != null)
