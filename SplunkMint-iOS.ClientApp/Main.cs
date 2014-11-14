@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SplunkMint;
 
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -15,6 +16,15 @@ namespace SplunkMintiOS.ClientApp
 			// if you want to use a different Application Delegate class from "AppDelegate"
 			// you can specify it here.
 			UIApplication.Main (args, null, "AppDelegate");
+
+//			try
+//			{
+//				Mint.SharedInstance.DisableCrashReporter();
+//				UIApplication.Main (args, null, "AppDelegate");
+//			}
+//			catch (Exception ex) {
+//				Mint.SharedInstance.XamarinLogException (ex.ToSplunkNSException ());
+//			}
 		}
 	}
 }

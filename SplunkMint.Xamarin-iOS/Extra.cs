@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace SplunkMint
 {
@@ -101,33 +102,34 @@ namespace SplunkMint
 
 		private void SyncContextExceptionHandler(object sender, Exception exception)
 		{
-//			Debug.WriteLine ("SyncContextExceptionHandler invoked");
-			LogUnobservedUnawaitedExceptionAsync(exception);
-//			MintLogResult logResult = await LogUnobservedUnawaitedExceptionAsync(exception);
+			Debug.WriteLine ("SyncContextExceptionHandler invoked");
+			MintLogResult logResult = LogUnobservedUnawaitedException(exception);
 //			OnUnhandledSyncExceptionHandled(exception, logResult);
 		}
 
 		private void UnobservedTaskExceptionsHandler(object sender, UnobservedTaskExceptionEventArgs e)
 		{
-//			Debug.WriteLine ("UnobservedTaskExceptionsHandler invoked");
-			LogUnobservedUnawaitedExceptionAsync(e.Exception);
-//			MintLogResult logResult = await LogUnobservedUnawaitedExceptionAsync(e.Exception);
+			Debug.WriteLine ("UnobservedTaskExceptionsHandler invoked");
+			MintLogResult logResult = LogUnobservedUnawaitedException(e.Exception);
 //			OnUnhandledSyncExceptionHandled(e.Exception, logResult);
 		}
 
-		private void LogUnobservedUnawaitedExceptionAsync(Exception exception)
+		private MintLogResult LogUnobservedUnawaitedException(Exception exception)
 		{
 			if ((HandleUnobservedException != null &&
-			    HandleUnobservedException (exception)) ||
-			    HandleUnobservedException == null) 
-			{
-				Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync invoked");
-			}
-//			LogException(exception.ToSplunkNSException(), null, 
-//				(MintLogResult logResult) => {
-//					Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync Completed invoked");
-//					OnUnhandledSyncExceptionHandled(exception, logResult);
-//				});
+				HandleUnobservedException (exception)) ||					
+				HandleUnobservedException == null) 
+				{
+					Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync invoked");
+				}
+
+			return new MintLogResult ();//XamarinLogException (exception.ToSplunkNSException ());
+//			return await await XamarinLogExceptionAsync (exception.ToSplunkNSException (), null);
+			//			LogException(exception.ToSplunkNSException(), null, 
+			//				(MintLogResult logResult) => {
+			//					Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync Completed invoked");
+			//					OnUnhandledSyncExceptionHandled(exception, logResult);
+			//				});
 		}
 
 		private void OnUnhandledSyncExceptionHandled(Exception exception, MintLogResult logResult)
@@ -139,7 +141,7 @@ namespace SplunkMint
 				HandledSuccessfully = logResult.ResultState == MintResultState.OKResultState
 			};
 
-			UnhandledExceptionHandled (this, eventArgs);
+//			UnhandledExceptionHandled (this, eventArgs);
 		}
 
 		#endregion
@@ -223,35 +225,41 @@ namespace SplunkMint
 
 		protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
 		{
-			NetworkDataFixture networkData = new NetworkDataFixture ();
-			networkData.Url = request.RequestUri.ToString ();
-			networkData.Protocol = request.RequestUri.Scheme;
-			byte[] contentBytes = await request.Content.ReadAsByteArrayAsync();
-			networkData.RequestLength = NSNumber.FromInt32 (contentBytes.Length);
-			networkData.AppendStartTime ();
-
-			string exceptionCaughtMessage = null;
+			string[] urls = Mint.SharedInstance.BlacklistUrls ();
+			string url = request.RequestUri.ToString ();
+			bool urlIsBlacklisted = urls.FirstOrDefault (p => url.Contains (p)) != null;
 			HttpResponseMessage responseMessage = null;
 
-			try
-			{
-				responseMessage = await base.SendAsync(request, cancellationToken);
-			}
-			catch (Exception ex) {
-				exceptionCaughtMessage = ex.Message;
-			}
+			if (!urlIsBlacklisted) {
+				NetworkDataFixture networkData = new NetworkDataFixture ();
+				networkData.Url = url;
+				networkData.Protocol = request.RequestUri.Scheme;
+				byte[] contentBytes = await request.Content.ReadAsByteArrayAsync ();
+				networkData.RequestLength = NSNumber.FromInt32 (contentBytes.Length);
+				networkData.AppendStartTime ();
 
-			networkData.AppendEndTime (); 
-			int statusCode = (int)responseMessage.StatusCode;
-			NSNumber statusCodeNumber = NSNumber.FromInt32 (statusCode);
-			networkData.StatusCode = statusCodeNumber;
-			networkData.AppendWithStatusCode (statusCodeNumber);
-			byte[] receivedBytes = await responseMessage.Content.ReadAsByteArrayAsync();
-			networkData.ResponseLength = NSNumber.FromInt32 (receivedBytes.Length);
-			if (exceptionCaughtMessage != null)
-				networkData.Exception = exceptionCaughtMessage;
-			networkData.SaveToDisk ();
+				string exceptionCaughtMessage = null;
 
+
+				try {
+					responseMessage = await base.SendAsync (request, cancellationToken);
+				} catch (Exception ex) {
+					exceptionCaughtMessage = ex.Message;
+				}
+
+				networkData.AppendEndTime (); 
+				int statusCode = (int)responseMessage.StatusCode;
+				NSNumber statusCodeNumber = NSNumber.FromInt32 (statusCode);
+				networkData.StatusCode = statusCodeNumber;
+				networkData.AppendWithStatusCode (statusCodeNumber);
+				byte[] receivedBytes = await responseMessage.Content.ReadAsByteArrayAsync ();
+				networkData.ResponseLength = NSNumber.FromInt32 (receivedBytes.Length);
+				if (exceptionCaughtMessage != null)
+					networkData.Exception = exceptionCaughtMessage;
+				networkData.SaveToDisk ();
+			} else {
+				responseMessage = await base.SendAsync (request, cancellationToken);
+			}
 			return responseMessage;
 		}
 	}

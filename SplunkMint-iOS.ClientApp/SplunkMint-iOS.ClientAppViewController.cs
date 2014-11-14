@@ -105,7 +105,7 @@ namespace SplunkMintiOS.ClientApp
 
 			Mint.SharedInstance.UserIdentifier = "gtaskos@splunk.com";
 
-			Mint.SharedInstance.AddURLToBlacklist ("www.splunk.com");
+			Mint.SharedInstance.AddURLToBlacklist ("splunk");
 		}
 
 		#endregion

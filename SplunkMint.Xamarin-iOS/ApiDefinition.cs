@@ -1335,22 +1335,22 @@ namespace SplunkMint
 		IntPtr Constructor (DeviceInfoDelegate deviceUtil, FileClientDelegate fileRepo, ServiceClientDelegate serviceRepo, ContentTypeDelegate aContentTypeWorker, RequestJsonSerializerDelegate jsonWorker);
 
 		[Export ("sendUnhandledRequestAsync:andResultBlock:")]
-		void SendUnhandledRequestAsync (MintExceptionRequest exceptionRequest, ResponseResultBlock resultBlock);
+		void SendUnhandledRequestAsync (MintExceptionRequest exceptionRequest, [NullAllowed] ResponseResultBlock resultBlock);
 
 		[Export ("getErrorHashFromJson:")]
 		string GetErrorHashFromJson (string jsonRequest);
 
 		[Export ("flushAsyncWithBlock:")]
-		void FlushAsync (ResponseResultBlock resultBlock);
+		void FlushAsync ( [NullAllowed]ResponseResultBlock resultBlock);
 
 		[Export ("transactionStartWithName:andResultBlock:")]
-		void TransactionStart (string transactionName, TransactionStartResultBlock resultBlock);
+		void TransactionStart (string transactionName, [NullAllowed] TransactionStartResultBlock resultBlock);
 
 		[Export ("transactionStopWithName:andResultBlock:")]
-		void TransactionStop (string transactionName, TransactionStopResultBlock resultBlock);
+		void TransactionStop (string transactionName, [NullAllowed] TransactionStopResultBlock resultBlock);
 
 		[Export ("transactionCancelWithName:reason:andResultBlock:")]
-		void TransactionCancel (string transactionName, string reason, TransactionStopResultBlock resultBlock);
+		void TransactionCancel (string transactionName, string reason, [NullAllowed] TransactionStopResultBlock resultBlock);
 
 		[Export ("stopAllTransactions:")]
 		void StopAllTransactions (string errorHash);
@@ -1359,61 +1359,61 @@ namespace SplunkMint
 		void StartWorker ();
 
 		[Export ("sendEventAsync:completionBlock:")]
-		void SendEventAsync (DataType eventType, ResponseResultBlock completed);
+		void SendEventAsync (DataType eventType, [NullAllowed] ResponseResultBlock completed);
 
 		[Export ("logEventAsync:completionBlock:")]
-		void LogEventAsync (DataType eventType, LogResultBlock completed);
+		void LogEventAsync (DataType eventType, [NullAllowed] LogResultBlock completed);
 
 		[Export ("logEvent:")]
 		MintLogResult LogEvent (DataType eventType);
 
 		[Export ("processPreviousLoggedRequestsAsyncWithBlock:")]
-		void ProcessPreviousLoggedRequestsAsync (ResponseResultBlock resultBlock);
+		void ProcessPreviousLoggedRequestsAsync ( [NullAllowed] ResponseResultBlock resultBlock);
 
 		[Export ("getLastCrashIdWithBlock:failure:")]
-		void GetLastCrashId (Delegate success, FailureBlock failure);
+		void GetLastCrashId (Delegate success, [NullAllowed] FailureBlock failure);
 
 		[Export ("getTotalCrashesNumWithBlock:failure:")]
 		void GetTotalCrashesNum (Delegate success, FailureBlock failure);
 
 		[Export ("clearTotalCrashesNumWithBlock:failure:")]
-		void ClearTotalCrashesNum (Delegate success, FailureBlock failure);
+		void ClearTotalCrashesNum (Delegate success, [NullAllowed] FailureBlock failure);
 
 		[Export ("sendEventAsyncWithTag:completionBlock:")]
-		void SendEventAsync (string tag, ResponseResultBlock completed);
+		void SendEventAsync (string tag, [NullAllowed] ResponseResultBlock completed);
 
 		[Export ("logEventAsyncWithTag:completionBlock:")]
-		void LogEventAsync (string tag, LogResultBlock completed);
+		void LogEventAsync (string tag, [NullAllowed] LogResultBlock completed);
 
 		[Export ("closeSession")]
 		MintLogResult CloseSession { get; }
 
 		[Export ("startSessionAsyncWithCompletionBlock:")]
-		void StartSessionAsync (ResponseResultBlock completed);
+		void StartSessionAsync ( [NullAllowed] ResponseResultBlock completed);
 
 		[Export ("closeSessionAsyncWithCompletionBlock:")]
-		void CloseSessionAsync (LogResultBlock completed);
+		void CloseSessionAsync ( [NullAllowed] LogResultBlock completed);
 
 		[Export ("sendExceptionAsync:extraDataKey:extraDataValue:completionBlock:")]
-		void SendExceptionAsync (NSException exception, string key, string value, ResponseResultBlock completed);
+		void SendExceptionAsync (NSException exception, string key, string value, [NullAllowed] ResponseResultBlock completed);
 
 		[Export ("sendExceptionAsync:limitedExtraDataList:completionBlock:")]
-		void SendExceptionAsync (NSException exception, LimitedExtraDataList extraDataList, ResponseResultBlock completed);
+		void SendExceptionAsync (NSException exception, LimitedExtraDataList extraDataList, [NullAllowed] ResponseResultBlock completed);
 
 		[Export ("logExceptionAsync:extraDataKey:extraDataValue:completionBlock:")]
-		void LogExceptionAsync (NSException exception, string key, string value, LogResultBlock completed);
+		void LogExceptionAsync (NSException exception, string key, string value, [NullAllowed] LogResultBlock completed);
 
 		[Export ("logExceptionAsync:limitedExtraDataList:completionBlock:")]
-		void LogExceptionAsync (NSException exception, LimitedExtraDataList extraDataList, LogResultBlock completed);
+		void LogExceptionAsync (NSException exception, LimitedExtraDataList extraDataList, [NullAllowed] LogResultBlock completed);
 
-		[Export ("logException:extraDataKey:extraDataValue:")]
-		MintLogResult LogException (NSException exception, string key, string value);
+		[Export ("xamarinLogExceptionAsync:andCompletionBlock:")]
+		void XamarinLogException (NSException exception, [NullAllowed] LogResultBlock resultBlock);
 
-		[Export ("logException:limitedExtraDataList:")]
-		MintLogResult LogException (NSException exception, LimitedExtraDataList extraDataList);
+		[Export ("xamarinLogException:")]
+		MintLogResult XamarinLogException (NSException exception);
 
 		[Export ("logEventAsyncWithName:logLevel:andCompletionBlock:")]
-		void LogEventAsync (string name, MintLogLevel logLevel, LogResultBlock completed);
+		void LogEventAsync (string name, MintLogLevel logLevel, [NullAllowed] LogResultBlock completed);
 
 		[Export ("logSplunkMintLogWithMessage:andLogLevel:")]
 		void LogSplunkMintLogWithMessage (string message, MintLogLevel logLevel);
@@ -1715,6 +1715,13 @@ namespace SplunkMint
 		void AddURLToBlacklist (string url);
 
 		/// <summary>
+		/// The URLs blacklisted from network interception.
+		/// </summary>
+		/// <returns>The urls.</returns>
+		[Export ("blacklistUrls")]
+		string[] BlacklistUrls();
+
+		/// <summary>
 		/// Log an event with message and log level.
 		/// </summary>
 		/// <param name="message">The message.</param>
@@ -1722,7 +1729,27 @@ namespace SplunkMint
 		/// <param name="resultBlock">The completed callback.</param>
 		[Export ("logEventAsyncWithName:logLevel:andCompletionBlock:")]
 		[Async]
-		void LogEventWithName (string message, MintLogLevel logLevel, [NullAllowed] LogResultBlock resultBlock); 
+		void LogEventWithName (string message, MintLogLevel logLevel, [NullAllowed] LogResultBlock resultBlock);
+
+		/// <summary>
+		/// Log a Xamarin exception as unhandled.
+		/// </summary>
+		/// <param name="exception">The exception.</param>
+		/// <param name="resultBlock">The completed callback.</param>
+		[Export ("xamarinLogException:andCompletionBlock:")]
+		[Async]
+		void XamarinLogException (NSException exception, [NullAllowed] LogResultBlock resultBlock);
+
+		/// <summary>
+		/// Log a Xamarin exception as unhandled.
+		/// </summary>
+		/// <param name="exception">The exception.</param>
+		/// <param name="resultBlock">The completed callback.</param>
+		[Export ("xamarinLogException:")]
+		MintLogResult XamarinLogException (NSException exception);
+
+		[Export ("exceptionFixtureFrom:")]
+		string ExceptionFixtureFrom (NSException exception);
 	}
 
 	/// <summary>
