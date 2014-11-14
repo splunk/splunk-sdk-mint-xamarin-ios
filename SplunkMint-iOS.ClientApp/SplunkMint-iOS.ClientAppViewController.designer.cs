@@ -64,6 +64,10 @@ namespace SplunkMintiOS.ClientApp
 
 		[Outlet]
 		[GeneratedCode ("iOS Designer", "1.0")]
+		UIButton UnobservedTaskButton { get; set; }
+
+		[Outlet]
+		[GeneratedCode ("iOS Designer", "1.0")]
 		UIButton WebRequestButton { get; set; }
 
 		[Action ("ApplicationExceptionButton_TouchUpInside:")]
@@ -135,6 +139,10 @@ namespace SplunkMintiOS.ClientApp
 			if (StopTransactionButton != null) {
 				StopTransactionButton.Dispose ();
 				StopTransactionButton = null;
+			}
+			if (UnobservedTaskButton != null) {
+				UnobservedTaskButton.Dispose ();
+				UnobservedTaskButton = null;
 			}
 			if (WebRequestButton != null) {
 				WebRequestButton.Dispose ();

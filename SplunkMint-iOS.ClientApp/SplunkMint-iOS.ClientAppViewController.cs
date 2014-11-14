@@ -59,6 +59,11 @@ namespace SplunkMintiOS.ClientApp
 			StopTransactionButton.TouchUpInside += StopTransactionButton_TouchUpInside;
 			NSUrlSessionButton.TouchUpInside += NSUrlSessionButton_TouchUpInside;
 			NSUrlConnectionButton.TouchUpInside += NSUrlConnectionButton_TouchUpInside;
+			UnobservedTaskButton.TouchUpInside += TaskUnawaitedMethod;
+
+			Mint.SharedInstance.HandleUnobservedException = (Exception arg) => {
+				return true;
+			};
 
 			Mint.SharedInstance.CachedRequestsSent += (sender, args) =>
 			{
@@ -67,12 +72,14 @@ namespace SplunkMintiOS.ClientApp
 					loggedRequestEventArgs.ResponseResult.ResultState == MintResultState.OKResultState
 					? "Successfully" : "with Failure and",
 					loggedRequestEventArgs.ResponseResult.ClientRequest);
+				ShowAlert("CachedRequestsSent");
 			};
 
 			Mint.SharedInstance.NetworkDataIntercepted += (sender, args) => 
 			{
 				NetworkDataFixture networkDataFixture = (NetworkDataFixture)sender;
 				Debug.WriteLine("Network Data Logged: {0}", networkDataFixture.ToJSONString);
+				ShowAlert("NetworkDataIntercepted");
 			};
 
 			Mint.SharedInstance.AddExtraData(new ExtraData("GlobalKey1", "GlobalValue1"));
@@ -134,6 +141,21 @@ namespace SplunkMintiOS.ClientApp
 		partial void ArgumentExceptionButton_TouchUpInside (UIButton sender)
 		{
 			throw new ArgumentException("Your param whatever is not complying to the requirements", "whatever");
+		}
+
+		void CrashUnawaitedVoidMethod (object sender, EventArgs args)
+		{
+			throw new Exception ("Void Unawaited");
+		}
+
+		void TaskUnawaitedMethod (object sender, EventArgs args)
+		{
+			Task.Run(async () =>  await CrashUnawaitedTaskMethod ());
+		}
+
+		private async Task CrashUnawaitedTaskMethod ()
+		{
+			throw new Exception ("Task Unawaited");
 		}
 
 		#endregion

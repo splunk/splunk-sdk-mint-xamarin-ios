@@ -4,9 +4,174 @@ using MonoTouch.Foundation;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace SplunkMint
 {
+	#region Mint Partial Class
+
+	public partial class Mint
+	{
+		#region [ Public Operations ]
+
+		#region [ Properties ]
+
+		public Func<Exception, bool> HandleUnobservedException { get; set; }
+
+		#endregion
+
+		#region Events
+
+		public event EventHandler<SplunkUnhandledEventArgs> UnhandledExceptionHandled = delegate { }; 
+
+		#endregion
+
+		[DllImport ("libc")]
+		private static extern int sigaction (Signal sig, IntPtr act, IntPtr oact);
+
+		enum Signal
+		{
+			SIGBUS = 10,
+			SIGSEGV = 11
+		}
+
+		/// <summary>
+		/// Initializes the Splunk>MINT plugin with Xamarin additions.
+		/// </summary>
+		/// <param name="apiKey">API key.</param>
+		public void InitAndStartXamarinSession(string apiKey)
+		{
+			TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionsHandler;
+			AsyncSynchronizationContext.ExceptionCaught += SyncContextExceptionHandler;
+			AsyncSynchronizationContext.Register();
+
+			if (Debugger.IsAttached) {
+				DisableCrashReporter ();
+			}
+
+			IntPtr sigbus = Marshal.AllocHGlobal (512);
+			IntPtr sigsegv = Marshal.AllocHGlobal (512);
+
+			// Store Mono SIGSEGV and SIGBUS handlers
+			sigaction (Signal.SIGBUS, IntPtr.Zero, sigbus);
+			sigaction (Signal.SIGSEGV, IntPtr.Zero, sigsegv);
+
+			InitAndStartSession (apiKey);
+
+			// Restore Mono SIGSEGV and SIGBUS handlers            
+			sigaction (Signal.SIGBUS, sigbus, IntPtr.Zero);
+			sigaction (Signal.SIGSEGV, sigsegv, IntPtr.Zero);
+
+			Marshal.FreeHGlobal (sigbus);
+			Marshal.FreeHGlobal (sigsegv);
+		}
+
+		/// <summary>
+		/// It will register the async handler for unawaited void and Task unhandled exceptions thrown in the application.
+		/// </summary>
+		/// <remarks>
+		/// This may be needed in special cases where the synchronization context could be null in early initialization.
+		/// The async handlers are registered in the initialization process of the component.
+		/// </remarks> 
+		public void RegisterAsyncHandlerContext()
+		{
+			AsyncSynchronizationContext.ExceptionCaught += SyncContextExceptionHandler;
+			AsyncSynchronizationContext.Register();
+		}
+
+		/// <summary>
+		/// Register monitoring of unobserved Task unhandled exceptions.
+		/// </summary>
+		public void RegisterUnobservedTaskExceptions()
+		{
+			TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionsHandler;
+		}
+
+		/// <summary>
+		/// Unregister monitoring of unobserved Task unhandled exceptions.
+		/// </summary>
+		public void UnregisterUnobservedTaskExceptions()
+		{
+			TaskScheduler.UnobservedTaskException -= UnobservedTaskExceptionsHandler;
+		}
+
+		#endregion
+
+		#region [ Private Methods ]
+
+		private void SyncContextExceptionHandler(object sender, Exception exception)
+		{
+//			Debug.WriteLine ("SyncContextExceptionHandler invoked");
+			LogUnobservedUnawaitedExceptionAsync(exception);
+//			MintLogResult logResult = await LogUnobservedUnawaitedExceptionAsync(exception);
+//			OnUnhandledSyncExceptionHandled(exception, logResult);
+		}
+
+		private void UnobservedTaskExceptionsHandler(object sender, UnobservedTaskExceptionEventArgs e)
+		{
+//			Debug.WriteLine ("UnobservedTaskExceptionsHandler invoked");
+			LogUnobservedUnawaitedExceptionAsync(e.Exception);
+//			MintLogResult logResult = await LogUnobservedUnawaitedExceptionAsync(e.Exception);
+//			OnUnhandledSyncExceptionHandled(e.Exception, logResult);
+		}
+
+		private void LogUnobservedUnawaitedExceptionAsync(Exception exception)
+		{
+			if ((HandleUnobservedException != null &&
+			    HandleUnobservedException (exception)) ||
+			    HandleUnobservedException == null) 
+			{
+				Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync invoked");
+			}
+//			LogException(exception.ToSplunkNSException(), null, 
+//				(MintLogResult logResult) => {
+//					Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync Completed invoked");
+//					OnUnhandledSyncExceptionHandled(exception, logResult);
+//				});
+		}
+
+		private void OnUnhandledSyncExceptionHandled(Exception exception, MintLogResult logResult)
+		{
+			SplunkUnhandledEventArgs eventArgs = new SplunkUnhandledEventArgs
+			{
+				ClientJsonRequest = logResult.ClientRequest,
+				ExceptionObject = exception,
+				HandledSuccessfully = logResult.ResultState == MintResultState.OKResultState
+			};
+
+			UnhandledExceptionHandled (this, eventArgs);
+		}
+
+		#endregion
+	}
+
+	#endregion
+
+	#region Models
+
+	/// <summary>
+	/// Event argument class for the unhandled exceptions occurred and handled by the plugin.
+	/// </summary>
+	public class SplunkUnhandledEventArgs : EventArgs
+	{
+		/// <summary>
+		/// The JSON fixture for the request to the server.
+		/// </summary>
+		public string ClientJsonRequest { get; set; }
+
+		/// <summary>
+		/// The exception object captured from the system.
+		/// </summary>
+		public Exception ExceptionObject { get; internal set; }
+
+		/// <summary>
+		/// If BugSense handled the exception successfully.
+		/// </summary>
+		public bool HandledSuccessfully { get; internal set; }        
+	}
+
+	#endregion
+
 	#region NSException extension class
 
 	/// <summary>
@@ -88,6 +253,95 @@ namespace SplunkMint
 			networkData.SaveToDisk ();
 
 			return responseMessage;
+		}
+	}
+
+	#endregion
+
+	#region [ Internal Class SynchronizationContext For Unawaited Void Methods ]
+
+	internal class AsyncSynchronizationContext : SynchronizationContext
+	{
+		public static event EventHandler<Exception> ExceptionCaught = delegate { };
+
+		public static AsyncSynchronizationContext Register()
+		{
+			var syncContext = Current;
+
+			AsyncSynchronizationContext customSynchronizationContext = null;
+			if (syncContext != null)
+			{
+				customSynchronizationContext = syncContext as AsyncSynchronizationContext;
+
+				if (customSynchronizationContext == null)
+				{
+					customSynchronizationContext = new AsyncSynchronizationContext(syncContext);
+					try
+					{
+						SetSynchronizationContext(customSynchronizationContext);
+					}
+					catch (Exception ex)
+					{
+						Console.WriteLine("SetSynchronizationContext Exception: {0}", ex);
+					}
+				}
+			}
+			return customSynchronizationContext;
+		}
+
+		private readonly SynchronizationContext _syncContext;
+
+		public AsyncSynchronizationContext(SynchronizationContext syncContext)
+		{
+			_syncContext = syncContext;
+		}
+
+		public override SynchronizationContext CreateCopy()
+		{
+			return new AsyncSynchronizationContext(_syncContext.CreateCopy());
+		}
+
+		public override void OperationCompleted()
+		{
+			_syncContext.OperationCompleted();
+		}
+
+		public override void OperationStarted()
+		{
+			_syncContext.OperationStarted();
+		}
+
+		public override void Post(SendOrPostCallback d, object state)
+		{
+			_syncContext.Post(WrapCallback(d), state);
+		}
+
+		public override void Send(SendOrPostCallback d, object state)
+		{
+			_syncContext.Send(d, state);
+		}
+
+		private static SendOrPostCallback WrapCallback(SendOrPostCallback sendOrPostCallback)
+		{
+			return state =>
+			{
+				Exception exception = null;
+
+				try
+				{
+					sendOrPostCallback(state);
+				}
+				catch (Exception ex)
+				{
+					exception = ex;
+				}
+
+				if (exception != null)
+				{
+					ExceptionCaught(null, exception);
+					// Invoke here the exception
+				}
+			};
 		}
 	}
 

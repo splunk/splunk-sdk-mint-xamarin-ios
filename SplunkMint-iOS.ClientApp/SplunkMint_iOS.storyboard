@@ -77,8 +77,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="22" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="71" y="288" width="185" height="30"/>
-                                <state key="normal" title="Application Exception">
+                                <rect key="frame" x="20" y="288" width="117" height="30"/>
+                                <state key="normal" title="Application Ex">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -86,8 +86,8 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="24" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
-                                <rect key="frame" x="63" y="326" width="201" height="30"/>
-                                <state key="normal" title="Argument Exception">
+                                <rect key="frame" x="172" y="288" width="124" height="30"/>
+                                <state key="normal" title="Argument Ex">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -158,6 +158,12 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="94" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO">
+                                <rect key="frame" x="23" y="320" width="102" height="30"/>
+                                <state key="normal" title="Unobserved">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                            </button>
                         </subviews>
                         <constraints>
                             <constraint id="46" firstItem="6" firstAttribute="trailing" secondItem="9" secondAttribute="trailing" constant="66"/>
@@ -178,6 +184,7 @@
                         <outlet property="NSUrlSessionButton" destination="59" id="name-outlet-59"/>
                         <outlet property="NSUrlConnectionButton" destination="64" id="name-outlet-64"/>
                         <outlet property="LogHandledException2Button" destination="90" id="name-outlet-90"/>
+                        <outlet property="UnobservedTaskButton" destination="94" id="name-outlet-94"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7" userLabel="First Responder" sceneMemberID="firstResponder"/>
