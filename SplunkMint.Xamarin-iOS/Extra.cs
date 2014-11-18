@@ -26,7 +26,7 @@ namespace SplunkMint
 		public event EventHandler<SplunkUnhandledEventArgs> UnhandledExceptionHandled = delegate { }; 
 
 		#endregion
-
+		 
 		[DllImport ("libc")]
 		private static extern int sigaction (Signal sig, IntPtr act, IntPtr oact);
 
@@ -42,6 +42,9 @@ namespace SplunkMint
 		/// <param name="apiKey">API key.</param>
 		public void InitAndStartXamarinSession(string apiKey)
 		{
+			AddExtraData(new ExtraData("XamarinSDKVersion", "4.0.1"));
+			XamarinHelper.XamarinArchitecture ("armv7s");
+
 			TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionsHandler;
 			AsyncSynchronizationContext.ExceptionCaught += SyncContextExceptionHandler;
 			AsyncSynchronizationContext.Register();
@@ -123,7 +126,9 @@ namespace SplunkMint
 					Debug.WriteLine ("LogUnobservedUnawaitedExceptionAsync invoked");
 				}
 
-			return new MintLogResult ();//XamarinLogException (exception.ToSplunkNSException ());
+			return new MintLogResult ();
+
+//XamarinLogException (exception.ToSplunkNSException ());
 //			return await await XamarinLogExceptionAsync (exception.ToSplunkNSException (), null);
 			//			LogException(exception.ToSplunkNSException(), null, 
 			//				(MintLogResult logResult) => {

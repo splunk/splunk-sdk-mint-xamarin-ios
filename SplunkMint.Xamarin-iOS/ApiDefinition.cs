@@ -18,6 +18,16 @@ namespace SplunkMint
 	public delegate void TransactionStopResultBlock (TransactionStopResult transactionStopResult);
 	public delegate void RemoteSettingsBlock (bool succeed, NSError error, RemoteSettingsData remoteSettingsData);
 
+	[BaseType (typeof (NSObject))]
+	public partial interface XamarinHelper {
+
+		[Static, Export ("xamarinArchitecture:")]
+		void XamarinArchitecture(string architecture);
+
+		[Static, Export ("xamarinVersion:")]
+		void XamarinVersion(string version);
+	}
+
 	[BaseType (typeof (NSError))]
 	public partial interface SPLJSONModelError {
 
