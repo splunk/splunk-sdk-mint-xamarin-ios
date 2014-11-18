@@ -9,7 +9,7 @@
     <RootNamespace>SplunkMint</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>SplunkMint.Xamarin-iOS</AssemblyName>
-    <ReleaseVersion>1.0.0.0</ReleaseVersion>
+    <ReleaseVersion>4.0.1</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
     <Description>SplunkMint-iOS Objective-C bindings</Description>
   </PropertyGroup>

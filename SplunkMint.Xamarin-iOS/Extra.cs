@@ -42,7 +42,7 @@ namespace SplunkMint
 		/// <param name="apiKey">API key.</param>
 		public void InitAndStartXamarinSession(string apiKey)
 		{
-			AddExtraData(new ExtraData("XamarinSDKVersion", "4.0.1"));
+			XamarinHelper.XamarinVersion("4.0.1");
 			XamarinHelper.XamarinArchitecture ("armv7s");
 
 			TaskScheduler.UnobservedTaskException += UnobservedTaskExceptionsHandler;
