@@ -260,7 +260,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Creates a custom <b>ExtraData</b> instance with key-value pairs to attach in every request.
+	/// A key-value pair of extra data to attach to every request.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface ExtraData {
@@ -280,17 +280,17 @@ namespace SplunkMint
 		string Value { get; set; }
 
 		/// <summary>
-		/// Gets the maximum length of the value.
+		/// Gets the length of the maximum value.
 		/// </summary>
-		/// <value>The length of the max value.</value>
+		/// <value>The length.</value>
 		[Export ("maxValueLength", ArgumentSemantic.Assign)]
 		NSNumber MaxValueLength { get; set; }
 
 		/// <summary>
 		/// Constructor with the specified key and value.
 		/// </summary>
-		/// <param name="key">Key.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="key">The key.</param>
+		/// <param name="value">The value.</param>
 		[Export ("initWithKey:andValue:")]
 		IntPtr Constructor (string key, string value);
 
@@ -298,7 +298,7 @@ namespace SplunkMint
 		/// Determines whether this <b>ExtraData</b> instance is equal to the extra data in the specified <b>ExtraData</b> instance.
 		/// </summary>
 		/// <returns><c>true</c> if this instance is equal to the extra data in the specified <b>ExtraData</b> instance; otherwise, <c>false</c>.</returns>
-		/// <param name="extraData">The <b>ExtraData</b> instance.</param>
+		/// <param name="extraData">The <b>ExtraData</b> instance to compare against.</param>
 		[Export ("isEqualToExtraData:")]
 		bool IsEqualToExtraData (ExtraData extraData);
 	}
@@ -374,20 +374,20 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Holds a limited number of 32 <b>ExtraData</b> instances.
+	/// A global list of extra data as an array of up to 32 <b>ExtraData</b> instances.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface LimitedExtraDataList {
 
 		/// <summary>
-		/// Gets the maximum count of <b>ExtraData</b> instances.
+		/// Gets the maximum count of <b>ExtraData</b> instances in the list.
 		/// </summary>
 		/// <value>The maximum count.</value>
 		[Export ("maxCount")]
 		uint MaxCount { get; set; }
 
 		/// <summary>
-		/// Gets the count of <b>ExtraData</b> instances of the list.
+		/// Gets the count of <b>ExtraData</b> instances in the list.
 		/// </summary>
 		/// <value>The count of <b>ExtraData</b> instances.</value>
 		[Export ("count")]
@@ -404,38 +404,38 @@ namespace SplunkMint
 		void AddExtraDataToDataFixture (DataFixture dataFixture);
 
 		/// <summary>
-		/// Gets the singleton shared instance.
+		/// Gets the singleton shared <b>LimitedExtraDataList</b>instance.
 		/// </summary>
-		/// <value>The singleton shared instance.</value>
+		/// <value>The singleton shared <b>LimitedExtraDataList</b> instance.</value>
 		[Static, Export ("sharedInstance")]
 		LimitedExtraDataList SharedInstance { get; }
 
 		/// <summary>
-		/// Add the specified extra data.
+		/// Adds the specified extra data to the list.
 		/// </summary>
-		/// <param name="extraData">The extra data.</param>
+		/// <param name="extraData">The extra data to add.</param>
 		[Export ("add:")]
 		void Add (ExtraData extraData);
 
 		/// <summary>
-		/// Remove the specified extra data.
+		/// Removes the specified extra data from the list.
 		/// </summary>
-		/// <param name="extraData">The extra data.</param>
+		/// <param name="extraData">The extra data to remove.</param>
 		[Export ("remove:")]
 		void Remove (ExtraData extraData);
 
 		/// <summary>
-		/// Adds an <b>ExtraData</b> instance to the array with a key and value.
+		/// Adds an <b>ExtraData</b> instance to the array as a key-value pair.
 		/// </summary>
-		/// <param name="key">The ey.</param>
+		/// <param name="key">The key.</param>
 		/// <param name="value">The value.</param>
 		[Export ("addWithKey:andValue:")]
 		void AddWithKey (string key, string value);
 
 		/// <summary>
-		/// Removes the <b>ExtraData</b> instance with specified key.
+		/// Removes the <b>ExtraData</b> instance for the specified key.
 		/// </summary>
-		/// <param name="key">Key.</param>
+		/// <param name="key">The key.</param>
 		[Export ("removeWithKey:")]
 		void RemoveWithKey (string key);
 
@@ -448,30 +448,31 @@ namespace SplunkMint
 		int IndexOf (ExtraData extraData);
 
 		/// <summary>
-		/// Inserts an <b>ExtraData</b> instance to the specified index of the internal array.
+		/// Inserts an <b>ExtraData</b> instance at the specified index in the internal array.
 		/// </summary>
-		/// <param name="index">Index.</param>
-		/// <param name="extraData">ExtraData.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="extraData">The <b>ExtraData</b> instance.</param>
 		[Export ("insertAtIndex:extraData:")]
 		void InsertAtIndex (uint index, ExtraData extraData);
 
 		/// <summary>
-		/// Removes the <b>ExtraData</b> instance at the specified index of the internal array.
+		/// Removes the <b>ExtraData</b> instance at the specified index in the internal array.
 		/// </summary>
-		/// <param name="index">Index.</param>
+		/// <param name="index">The ndex.</param>
 		[Export ("removeAtIndex:")]
 		void RemoveAtIndex (uint index);
 
 		/// <summary>
-		/// Clear all the <b>ExtraData</b> instances from the array.
+		/// Clears all the <b>ExtraData</b> instances from the array.
 		/// </summary>
 		[Export ("clear")]
 		void Clear ();
 
 		/// <summary>
-		/// Contains the specified extra data.
+		/// Indicates whether the list contains the specified <b>ExtraData</b> instance.
 		/// </summary>
-		/// <param name="extraData">ExtraData.</param>
+		/// <returns><c>true</c> if this instance contains the extra data; otherwise, <c>false</c>.</returns>
+		/// <param name="extraData">The <b>ExtraData</b> instance.</param>
 		[Export ("contains:")]
 		bool Contains (ExtraData extraData);
 	}
