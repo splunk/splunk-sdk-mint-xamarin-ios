@@ -260,7 +260,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Used to create a custom extra data instance with key and value properties to attach in every request.
+	/// Creates a custom <b>ExtraData</b> instance with key-value pairs to attach in every request.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface ExtraData {
@@ -295,10 +295,10 @@ namespace SplunkMint
 		IntPtr Constructor (string key, string value);
 
 		/// <summary>
-		/// Determines whether this instance is equal to extra data for specified extraData.
+		/// Determines whether this <b>ExtraData</b> instance is equal to the extra data in the specified <b>ExtraData</b> instance.
 		/// </summary>
-		/// <returns><c>true</c> if this instance is equal to extra data the specified extraData; otherwise, <c>false</c>.</returns>
-		/// <param name="extraData">Extra data.</param>
+		/// <returns><c>true</c> if this instance is equal to the extra data in the specified <b>ExtraData</b> instance; otherwise, <c>false</c>.</returns>
+		/// <param name="extraData">The <b>ExtraData</b> instance.</param>
 		[Export ("isEqualToExtraData:")]
 		bool IsEqualToExtraData (ExtraData extraData);
 	}
@@ -374,29 +374,29 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Holds a limited number of 32 ExtraData instances.
+	/// Holds a limited number of 32 <b>ExtraData</b> instances.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface LimitedExtraDataList {
 
 		/// <summary>
-		/// Gets the maximum count of ExtraData instances.
+		/// Gets the maximum count of <b>ExtraData</b> instances.
 		/// </summary>
 		/// <value>The maximum count.</value>
 		[Export ("maxCount")]
 		uint MaxCount { get; set; }
 
 		/// <summary>
-		/// Gets the count of ExtraData instances of the list.
+		/// Gets the count of <b>ExtraData</b> instances of the list.
 		/// </summary>
-		/// <value>The count of ExtraData instances.</value>
+		/// <value>The count of <b>ExtraData</b> instances.</value>
 		[Export ("count")]
 		uint Count { get; set; }
 
 		/// <summary>
-		/// Gets the internal ExtraData instances array.
+		/// Gets the internal <b>ExtraData</b> instances array.
 		/// </summary>
-		/// <value>The ExtraData array.</value>
+		/// <value>The <b>ExtraData</b> array.</value>
 		[Export ("extraDataArray", ArgumentSemantic.Retain)]
 		NSMutableArray ExtraDataArray { get; set; }
 
@@ -411,44 +411,44 @@ namespace SplunkMint
 		LimitedExtraDataList SharedInstance { get; }
 
 		/// <summary>
-		/// Add the specified ExtraData.
+		/// Add the specified extra data.
 		/// </summary>
-		/// <param name="extraData">The ExtraData.</param>
+		/// <param name="extraData">The extra data.</param>
 		[Export ("add:")]
 		void Add (ExtraData extraData);
 
 		/// <summary>
-		/// Remove the specified ExtraData.
+		/// Remove the specified extra data.
 		/// </summary>
-		/// <param name="extraData">The ExtraData.</param>
+		/// <param name="extraData">The extra data.</param>
 		[Export ("remove:")]
 		void Remove (ExtraData extraData);
 
 		/// <summary>
-		/// Adds an ExtraData instance to the array with key and value.
+		/// Adds an <b>ExtraData</b> instance to the array with a key and value.
 		/// </summary>
-		/// <param name="key">Key.</param>
-		/// <param name="value">Value.</param>
+		/// <param name="key">The ey.</param>
+		/// <param name="value">The value.</param>
 		[Export ("addWithKey:andValue:")]
 		void AddWithKey (string key, string value);
 
 		/// <summary>
-		/// Removes the ExtraData instance with specified key.
+		/// Removes the <b>ExtraData</b> instance with specified key.
 		/// </summary>
 		/// <param name="key">Key.</param>
 		[Export ("removeWithKey:")]
 		void RemoveWithKey (string key);
 
 		/// <summary>
-		/// Returns the index of the specified ExtraData in the internal array.
+		/// Returns the index of the specified <b>ExtraData</b> instance in the internal array.
 		/// </summary>
-		/// <returns>The of.</returns>
-		/// <param name="extraData">Extra data.</param>
+		/// <returns>The index.</returns>
+		/// <param name="extraData">The <b>ExtraData</b> instance.</param>
 		[Export ("indexOf:")]
 		int IndexOf (ExtraData extraData);
 
 		/// <summary>
-		/// Inserts an ExtraData instance to the specified index of the internal array.
+		/// Inserts an <b>ExtraData</b> instance to the specified index of the internal array.
 		/// </summary>
 		/// <param name="index">Index.</param>
 		/// <param name="extraData">ExtraData.</param>
@@ -456,20 +456,20 @@ namespace SplunkMint
 		void InsertAtIndex (uint index, ExtraData extraData);
 
 		/// <summary>
-		/// Removes the ExtraData instance in the specified index of the internal array.
+		/// Removes the <b>ExtraData</b> instance at the specified index of the internal array.
 		/// </summary>
 		/// <param name="index">Index.</param>
 		[Export ("removeAtIndex:")]
 		void RemoveAtIndex (uint index);
 
 		/// <summary>
-		/// Clear all the ExtraData instance of the array.
+		/// Clear all the <b>ExtraData</b> instances from the array.
 		/// </summary>
 		[Export ("clear")]
 		void Clear ();
 
 		/// <summary>
-		/// Contains the specified ExtraData.
+		/// Contains the specified extra data.
 		/// </summary>
 		/// <param name="extraData">ExtraData.</param>
 		[Export ("contains:")]
@@ -477,7 +477,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// A custom NSException derived class.
+	/// A custom <b>NSException</b> derived class.
 	/// </summary>
 	[BaseType (typeof (NSException))]
 	public partial interface MintMessageException {
@@ -499,7 +499,7 @@ namespace SplunkMint
 	public partial interface MintResult {
 
 		/// <summary>
-		/// The type of the request.
+		/// The type of request.
 		/// </summary>
 		/// <value>The type of the request.</value>
 		[Export ("requestType")]
@@ -534,7 +534,7 @@ namespace SplunkMint
 		string ClientRequest { get; set; }
 
 		/// <summary>
-		/// Indicating whether the request is handled while debugging.
+		/// Indicates whether the request is handled while debugging.
 		/// </summary>
 		/// <value><c>true</c> if handled while debugging; otherwise, <c>false</c>.</value>
 		[Export ("handledWhileDebugging")]
@@ -542,13 +542,13 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Return response information when an action is directly sent to the server.
+	/// Returns response information when an action is sent directly to the server.
 	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintResponseResult {
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value>The error identifier.</value>
 		[Export ("errorId", ArgumentSemantic.Retain)]
@@ -562,35 +562,35 @@ namespace SplunkMint
 		string ServerResponse { get; set; }
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value>The URL.</value>
 		[Export ("url", ArgumentSemantic.Retain)]
 		string Url { get; set; }
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value>The content text.</value>
 		[Export ("contentText", ArgumentSemantic.Retain)]
 		string ContentText { get; set; }
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value>The ticker text.</value>
 		[Export ("tickerText", ArgumentSemantic.Retain)]
 		string TickerText { get; set; }
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value>The content title.</value>
 		[Export ("contentTitle", ArgumentSemantic.Retain)]
 		string ContentTitle { get; set; }
 
 		/// <summary>
-		/// Not applicable, deprecated.
+		/// Deprecated. This value is not used.
 		/// </summary>
 		/// <value><c>true</c> if this instance is resolved; otherwise, <c>false</c>.</value>
 		[Export ("isResolved")]
@@ -598,13 +598,13 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Return log information when an action is used to log a request.
+	/// Returns log information when an action is used to log a request.
 	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintLogResult {
 
 		/// <summary>
-		/// The type of the log.
+		/// The type of log.
 		/// </summary>
 		/// <value>The type of the log.</value>
 		[Export ("logType")]
@@ -612,7 +612,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Returned base instance for Transaction actions
+	/// Returns a base instance for transaction actions.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface TransactionResult {
@@ -633,7 +633,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Base transaction class.
+	/// The base transaction class.
 	/// </summary>
 	[BaseType (typeof (DataFixture))]
 	public partial interface SPLTransaction {
@@ -1467,7 +1467,7 @@ namespace SplunkMint
 //	, Delegates=new string [] {"WeakDelegate"},
 //	Events=new Type [] { typeof (MintNotificationDelegate) }
 	/// <summary>
-	/// The Splunk>MINT base class
+	/// The Splunk MINT base class
 	/// </summary>
 	[BaseType (typeof (NSObject), Delegates=new string [] {"WeakDelegate"}, Events=new Type [] { typeof (MintNotificationDelegate) })]
 	public partial interface BugSenseBase : RequestWorkerDelegate {
@@ -1497,7 +1497,7 @@ namespace SplunkMint
 		string UserIdentifier { get; set; }
 
 		/// <summary>
-		/// Indicating whether Splunk>MINT will handle requests while debugging.
+		/// Indicating whether Splunk MINT will handle requests while debugging.
 		/// </summary>
 		/// <value><c>true</c> if handle while debugging; otherwise, <c>false</c>.</value>
 		[Export ("handleWhileDebugging")]
@@ -1608,7 +1608,7 @@ namespace SplunkMint
 		void CloseSession ([NullAllowed] LogResultBlock completed);
 
 		/// <summary>
-		/// Logs a handled exception with extra data key-value.
+		/// Logs a handled exception with extra data as a key-value pair.
 		/// </summary>
 		/// <param name="exception">The NSException instance.</param>
 		/// <param name="key">The key.</param>
@@ -1619,10 +1619,10 @@ namespace SplunkMint
 		void LogException (NSException exception, string key, string value, [NullAllowed] LogResultBlock completed);
 
 		/// <summary>
-		/// Logs a handled exception with a LimitedExtraDataList instance.
+		/// Logs a handled exception with a <b>LimitedExtraDataList</b> instance.
 		/// </summary>
-		/// <param name="exception">The NSException instance.</param>
-		/// <param name="extraDataList">The LimitedExtraDataList.</param>
+		/// <param name="exception">The <b>NSException</b> instance.</param>
+		/// <param name="extraDataList">The <b>LimitedExtraDataList</b> instance.</param>
 		/// <param name="completed">The completed callback.</param>
 		[Export ("logExceptionAsync:limitedExtraDataList:completionBlock:")]
 		[Async]
@@ -1630,7 +1630,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// The base Splunk>MINT BugSense handler.
+	/// The base Splunk MINT BugSenseBase handler.
 	/// </summary>
 	[BaseType (typeof (BugSenseBase))]
 	public partial interface BugSense {
@@ -1650,7 +1650,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// The base Splunk>MINT handler.
+	/// The base Splunk MINT handler.
 	/// </summary>
 	[BaseType (typeof (BugSense))]
 	public partial interface MintBase {
@@ -1763,7 +1763,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// The Splunk>MINT handler class.
+	/// The Splunk MINT handler class.
 	/// </summary>
 	[BaseType (typeof (MintBase))]
 	public partial interface Mint {
