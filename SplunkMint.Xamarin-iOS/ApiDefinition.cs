@@ -478,57 +478,57 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// A custom <b>NSException</b> derived class.
+	/// A custom <b>NSException</b>-derived class.
 	/// </summary>
 	[BaseType (typeof (NSException))]
 	public partial interface MintMessageException {
 
 		/// <summary>
-		/// Constructor with specified name, reason and userInfo.
+		/// Constructor with the specified name, reason, and user information.
 		/// </summary>
 		/// <param name="aName">A name.</param>
 		/// <param name="aReason">A reason.</param>
-		/// <param name="aUserInfo">A user info dictionary.</param>
+		/// <param name="aUserInfo">A dictionary containing user information.</param>
 		[Export ("initWithName:reason:userInfo:")]
 		IntPtr Constructor (string aName, string aReason, NSDictionary aUserInfo);
 	}
 
 	/// <summary>
-	/// Base type used to return information to user actions.
+	/// The base type used to return information about user actions.
 	/// </summary>
 	[BaseType (typeof (NSObject))]
 	public partial interface MintResult {
 
 		/// <summary>
-		/// The type of request.
+		/// Gets or sets the type of request.
 		/// </summary>
-		/// <value>The type of the request.</value>
+		/// <value>The request type.</value>
 		[Export ("requestType")]
 		MintRequestType RequestType { get; set; }
 
 		/// <summary>
-		/// The result description, if any.
+		/// Gets or sets the result description, if any.
 		/// </summary>
 		/// <value>The description.</value>
 		[Export ("description", ArgumentSemantic.Retain)]
 		string Description { get; set; }
 
 		/// <summary>
-		/// The state of the result.
+		/// Gets or sets the state of the result.
 		/// </summary>
-		/// <value>The state of the result.</value>
+		/// <value>The result state.</value>
 		[Export ("resultState")]
 		MintResultState ResultState { get; set; }
 
 		/// <summary>
-		/// The exception related to the result, if any.
+		/// Gets or sets the exception error that is related to the result, if any.
 		/// </summary>
 		/// <value>The exception error.</value>
 		[Export ("exceptionError", ArgumentSemantic.Retain)]
 		MintMessageException ExceptionError { get; set; }
 
 		/// <summary>
-		/// The JSON model of the request.
+		/// Gets or sets the JSON client request.
 		/// </summary>
 		/// <value>The JSON request.</value>
 		[Export ("clientRequest", ArgumentSemantic.Retain)]
@@ -543,7 +543,7 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Returns response information when an action is sent directly to the server.
+	/// The MINT response information that is returned when an action is sent directly to the server.
 	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintResponseResult {
@@ -556,9 +556,9 @@ namespace SplunkMint
 		NSNumber ErrorId { get; set; }
 
 		/// <summary>
-		/// The server response description.
+		/// Gets or sets the server response description.
 		/// </summary>
-		/// <value>The server response.</value>
+		/// <value>The server response description.</value>
 		[Export ("serverResponse", ArgumentSemantic.Retain)]
 		string ServerResponse { get; set; }
 
@@ -599,34 +599,34 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Returns log information when an action is used to log a request.
+	/// The MINT log information that is returned when an action is used to log a request.
 	/// </summary>
 	[BaseType (typeof (MintResult))]
 	public partial interface MintLogResult {
 
 		/// <summary>
-		/// The type of log.
+		/// Gets or sets the type of log.
 		/// </summary>
-		/// <value>The type of the log.</value>
+		/// <value>The log type.</value>
 		[Export ("logType")]
 		MintLogType LogType { get; set; }
 	}
 
 	/// <summary>
-	/// Returns a base instance for transaction actions.
+	/// A base instance for transaction actions.
 	/// </summary>
 	[BaseType (typeof (SPLJSONModel))]
 	public partial interface TransactionResult {
 
 		/// <summary>
-		/// The transaction status.
+		/// Gets or sets the transaction status.
 		/// </summary>
 		/// <value>The transaction status.</value>
 		[Export ("transactionStatus")]
 		TransactionStatus TransactionStatus { get; set; }
 
 		/// <summary>
-		/// A helper description.
+		/// Gets or sets the helper description.
 		/// </summary>
 		/// <value>The description.</value>
 		[Export ("description", ArgumentSemantic.Retain)]
@@ -640,14 +640,14 @@ namespace SplunkMint
 	public partial interface SPLTransaction {
 
 		/// <summary>
-		/// The name of the transaction.
+		/// Gets or sets the name of the transaction.
 		/// </summary>
-		/// <value>The name.</value>
+		/// <value>The transaction name.</value>
 		[Export ("name", ArgumentSemantic.Retain)]
 		string Name { get; set; }
 
 		/// <summary>
-		/// The transaction identifier, for internal purposes.
+		/// Gets or sets the transaction identifier, for internal purposes.
 		/// </summary>
 		/// <value>The transaction identifier.</value>
 		[Export ("transactionId", ArgumentSemantic.Retain)]
@@ -777,57 +777,57 @@ namespace SplunkMint
 		TrStart GetInstanceWithTransactionName (string transactionName, MintAppEnvironment anAppEnvironment, MintPerformance aPerformance);
 
 		/// <summary>
-		/// Determines whether this JSON model is a transaction start.
+		/// Determines whether the JSON model is the start of a transaction.
 		/// </summary>
-		/// <returns><c>true</c> if this instance is JSON transaction start; otherwise, <c>false</c>.</returns>
-		/// <param name="json">Json.</param>
+		/// <returns><c>true</c> if this instance is a transaction start; otherwise, <c>false</c>.</returns>
+		/// <param name="json">The JSON model.</param>
 		[Static, Export ("isJSONTrStart:")]
 		bool IsJSONTrStart (string json);
 	}
 
 	/// <summary>
-	/// Returned class with information when you start a transaction
+	/// The information that is returned when you start a transaction.
 	/// </summary>
 	[BaseType (typeof (TransactionResult))]
 	public partial interface TransactionStartResult {
 
 		/// <summary>
-		/// The transaction name.
+		/// Gets or sets the name of the transaction.
 		/// </summary>
-		/// <value>The name of the transaction.</value>
+		/// <value>The transaction name.</value>
 		[Export ("transactionName", ArgumentSemantic.Retain)]
 		string TransactionName { get; set; }
 
 		/// <summary>
-		/// The TrStart instance object.
+		/// Gets or sets the transaction start object instance.
 		/// </summary>
-		/// <value>The TrStart instance object.</value>
+		/// <value>The <b>TrStart</b> instance.</value>
 		[Export ("transactionStart", ArgumentSemantic.Retain)]
 		TrStart TransactionStart { get; set; }
 	}
 
 	/// <summary>
-	/// The tranaction stop class.
+	/// The transaction stop class.
 	/// </summary>
 	[BaseType (typeof (SPLTransaction))]
 	public partial interface TrStop {
 
 		/// <summary>
-		/// The duration of the transaction since it started in milliseconds.
+		/// Gets or sets the duration of the transaction since it started.
 		/// </summary>
-		/// <value>The duration.</value>
+		/// <value>The duration, in milliseconds.</value>
 		[Export ("duration", ArgumentSemantic.Retain)]
 		NSNumber Duration { get; set; }
 
 		/// <summary>
-		/// The status of the transaction.
+		/// Gets or sets the status of the transaction.
 		/// </summary>
-		/// <value>The status.</value>
+		/// <value>The transaction status.</value>
 		[Export ("status", ArgumentSemantic.Retain)]
 		string Status { get; set; }
 
 		/// <summary>
-		/// Reason if cancelled.
+		/// Gets or sets the the reason for cancelling the transaction.
 		/// </summary>
 		/// <value>The reason.</value>
 		[Export ("reason", ArgumentSemantic.Retain)]
@@ -838,22 +838,22 @@ namespace SplunkMint
 	}
 
 	/// <summary>
-	/// Return instance for transaction stop/cancel actions.
+	/// The class that is returned when transactions are stopped or cancelled.
 	/// </summary>
 	[BaseType (typeof (TransactionResult))]
 	public partial interface TransactionStopResult {
 
 		/// <summary>
-		/// The reason of the transaction when stopped or cancelled.
+		/// Gets or sets the reason the transaction was stopped or cancelled.
 		/// </summary>
 		/// <value>The reason.</value>
 		[Export ("reason", ArgumentSemantic.Retain)]
 		string Reason { get; set; }
 
 		/// <summary>
-		/// The tranaction stop instance.
+		/// Gets or sets the tranaction stop object instance.
 		/// </summary>
-		/// <value>The transaction stop.</value>
+		/// <value>The <b>TrStop</b> instance.</value>
 		[Export ("transactionStop", ArgumentSemantic.Retain)]
 		TrStop TransactionStop { get; set; }
 	}
