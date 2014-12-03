@@ -37,9 +37,9 @@ namespace SplunkMint
 		}
 
 		/// <summary>
-		/// Initializes the Splunk>MINT plugin with Xamarin additions.
+		/// Initializes the Splunk MINT plugin with additions for Xamarin.
 		/// </summary>
-		/// <param name="apiKey">API key.</param>
+		/// <param name="apiKey">Your Splunk MINT API key.</param>
 		public void InitAndStartXamarinSession(string apiKey)
 		{
 			XamarinHelper.XamarinVersion("4.0.1");
@@ -71,10 +71,10 @@ namespace SplunkMint
 		}
 
 		/// <summary>
-		/// It will register the async handler for unawaited void and Task unhandled exceptions thrown in the application.
+		/// Registers the async handler for unawaited void and Task unhandled exceptions that are thrown in the application.
 		/// </summary>
 		/// <remarks>
-		/// This may be needed in special cases where the synchronization context could be null in early initialization.
+		/// This function might be needed in special cases where the synchronization context could be <c>null</c> in early initialization.
 		/// The async handlers are registered in the initialization process of the component.
 		/// </remarks> 
 		public void RegisterAsyncHandlerContext()
@@ -84,7 +84,7 @@ namespace SplunkMint
 		}
 
 		/// <summary>
-		/// Register monitoring of unobserved Task unhandled exceptions.
+		/// Registers monitoring of unobserved Task unhandled exceptions.
 		/// </summary>
 		public void RegisterUnobservedTaskExceptions()
 		{
@@ -92,7 +92,7 @@ namespace SplunkMint
 		}
 
 		/// <summary>
-		/// Unregister monitoring of unobserved Task unhandled exceptions.
+		/// Unregisters the monitoring of unobserved Task unhandled exceptions.
 		/// </summary>
 		public void UnregisterUnobservedTaskExceptions()
 		{

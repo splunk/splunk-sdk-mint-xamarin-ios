@@ -404,7 +404,7 @@ namespace SplunkMint
 		void AddExtraDataToDataFixture (DataFixture dataFixture);
 
 		/// <summary>
-		/// Gets the singleton shared <b>LimitedExtraDataList</b>instance.
+		/// Gets the singleton shared <b>LimitedExtraDataList</b> instance.
 		/// </summary>
 		/// <value>The singleton shared instance.</value>
 		[Static, Export ("sharedInstance")]
@@ -1184,61 +1184,61 @@ namespace SplunkMint
 		string Latency { get; set; }
 
 		/// <summary>
-		/// Append the status code to the network call instance.
+		/// Appends the status code to the network call instance.
 		/// </summary>
 		/// <param name="statusCode">The status code.</param>
 		[Export ("appendWithStatusCode:")]
 		void AppendWithStatusCode (NSNumber statusCode);
 
 		/// <summary>
-		/// Appends the start time of the network call.
+		/// Appends the start time of the network call to the network call instance.
 		/// </summary>
 		[Export ("appendStartTime")]
 		void AppendStartTime ();
 
 		/// <summary>
-		/// Appends the end time of the network call.
+		/// Appends the end time of the network call to the network call instance.
 		/// </summary>
 		[Export ("appendEndTime")]
 		void AppendEndTime ();
 
 		/// <summary>
-		/// Appends the <b>NSUrlRequest</b> information.
+		/// Appends request information to the network call instance.
 		/// </summary>
 		/// <param name="request">The <b>NSUrlRequest</b> instance.</param>
 		[Export ("appendRequestInfo:")]
 		void AppendRequestInfo (NSUrlRequest request);
 
 		/// <summary>
-		/// Appends the <b>NSUrlResponse</b> information.
+		/// Appends response information to the network call instance.
 		/// </summary>
 		/// <param name="response">The <b>NSUrlResponse</b> instance.</param>
 		[Export ("appendResponseInfo:")]
 		void AppendResponseInfo (NSUrlResponse response);
 
 		/// <summary>
-		/// Appends the data returned from the server.
+		/// Appends the data returned from the server to the network call instance.
 		/// </summary>
 		/// <param name="data">The <b>NSData</b> instance.</param>
 		[Export ("appendResponseData:")]
 		void AppendResponseData (NSData data);
 
 		/// <summary>
-		/// Appends the size of the response data.
+		/// Appends the size of the response data to the network call instance.
 		/// </summary>
 		/// <param name="dataSize">The data size.</param>
 		[Export ("appendResponseDataSize:")]
 		void AppendResponseDataSize (uint dataSize);
 
 		/// <summary>
-		/// Appends any error that has occurred.
+		/// Appends any error that has occurred to the network call instance.
 		/// </summary>
 		/// <param name="error">The <b>NSError</b> error instance.</param>
 		[Export ("appendWithError:")]
 		void AppendWithError (NSError error);
 
 		/// <summary>
-		/// Appends any global extra data.
+		/// Appends any global extra data to the network call instance.
 		/// </summary>
 		[Export ("appendGlobalExtraData")]
 		void AppendGlobalExtraData ();
@@ -1507,7 +1507,7 @@ namespace SplunkMint
 		/// <summary>
 		/// Gets or sets the global extra data list.
 		/// </summary>
-		/// <value>The <b>LimitedExtraDataList</b> global instance.</value>
+		/// <value>The <b>LimitedExtraDataList</b> instance.</value>
 		[Export ("extraDataList", ArgumentSemantic.Retain)]
 		LimitedExtraDataList ExtraDataList { get; set; }
 
@@ -1552,12 +1552,12 @@ namespace SplunkMint
 		/// <summary>
 		/// Adds a <b>LimitedExtraDataList</b> instance by appending the <b>ExtraData</b> instance to the global <b>LimitedExtraDataList</b>.
 		/// </summary>
-		/// <param name="limitedExtraDataList">Limited extra data list.</param>
+		/// <param name="limitedExtraDataList">The <b>LimitedExtraDataList</b> instance.</param>
 		[Export ("addExtraDataList:")]
 		void AddExtraDataList (LimitedExtraDataList limitedExtraDataList);
 
 		/// <summary>
-		/// Removes an <b>ExtraData</b> instance from the global list for the specified key.
+		/// Removes an <b>ExtraData</b> instance from the global extra data list for the specified key.
 		/// </summary>
 		/// <returns><c>true</c> if extra data was removed; otherwise, <c>false</c>.</returns>
 		/// <param name="key">The extra data key.</param>
@@ -1640,7 +1640,7 @@ namespace SplunkMint
 //		MintNotificationDelegate NotificationDelegate { get; set; }
 
 		/// <summary>
-		/// Gets the singleton shared <b>BugSense</b>instance.
+		/// Gets the singleton shared <b>BugSense</b> instance.
 		/// </summary>
 		/// <value>The shared instance.</value>
 		[Static, Export ("sharedInstance")]
@@ -1709,7 +1709,7 @@ namespace SplunkMint
 		void TransactionStop (string transactionId, [NullAllowed] TransactionStopResultBlock resultBlock);
 
 		/// <summary>
-		/// Cancles a transaction.
+		/// Cancels a transaction.
 		/// </summary>
 		/// <param name="transactionId">The transaction identifier.</param>
 		/// <param name="reason">The reason for cancelling the transaction.</param>
@@ -1728,7 +1728,7 @@ namespace SplunkMint
 		/// <summary>
 		/// The list of URLs that have been blacklisted from network interception.
 		/// </summary>
-		/// <returns>The urls.</returns>
+		/// <returns>The URLs.</returns>
 		[Export ("blacklistUrls")]
 		string[] BlacklistUrls();
 
@@ -1770,7 +1770,7 @@ namespace SplunkMint
 	public partial interface Mint {
 
 		/// <summary>
-		/// Gets the singleton shared <b>Mint</b>instance.
+		/// Gets the singleton shared <b>Mint</b> instance.
 		/// </summary>
 		/// <value>The shared instance.</value>
 		[Static, Export ("sharedInstance")]
