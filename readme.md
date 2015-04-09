@@ -119,7 +119,7 @@ The **InitAndStartXamarinSession** method installs the Splunk exception handler 
 
 If you crash the app while debugging, the crash will not be reported. To report crashes, you must deploy the app to your device or simulator and then start it outside the debugging environment.
 
-The native crash reporter reports all native unsymbolicated unhandled crashes that occur in your Xamarin application. However, this report is often inadequate because the managed C# code contains important information. To successfully handle every unhandled crash that is reported to the managed environment, wrap the main application entry point code (the **Main(string[] ***args***)** method of your **Main.cs** file) in a `try-catch` block, as follows:
+The native crash reporter reports all native unsymbolicated unhandled crashes that occur in your Xamarin application. However, this report is often inadequate because the managed C# code contains important information. To successfully handle every unhandled crash that is reported to the managed environment, wrap the main application entry point code (the **Main(string[]** *args* **)** method of your **Main.cs** file) in a `try-catch` block, as follows:
 
 ```
 try
@@ -306,7 +306,7 @@ To help investigate the cause of a crash, you can have Splunk MINT to report the
 
 With Splunk MINT, you can closely track the experience of any given user, for example to investigate a complaint. First, provide a user identifier such as an ID number from a database, an email address, a push ID, or a username. (However, please do not transmit any personally-identifiable or sensitive data into Splunk MINT.) Then in the Splunk MINT Management Console dashboard, you can search for errors that affect a particular user ID and examine crash data associated with her or her usage of your app. This feature is useful for apps with a high average revenue per user (ARPU), for apps that are deployed in a mobile device management (MDM) environment, and during quality-assurance testing.
 
-* Set the **UserIdentifier **property** **to a user identifier as follows:
+* Set the **UserIdentifier** property to a user identifier as follows:
 
     `Mint.SharedInstance.UserIdentifier = "Splunk MINT";`
 
