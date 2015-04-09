@@ -64,7 +64,7 @@ To install the Splunk MINT NuGet package by using the Package Manager Console, d
 2. On the **Tools** menu, point to **Library Package Manager**, and then click **Package Manager Console**.
 3. In the **Package Manager Console** at the **PM>** prompt, type the following:
 
-       Install-Package SplunkMint.Xamarin-iOS
+    Install-Package SplunkMint.Xamarin-iOS
 
 To install the Splunk MINT SDK by using the Package Manager window in Visual Studio:
 
@@ -92,24 +92,26 @@ To use the SDK:
 
 1. In the class that will use Splunk MINT, add the following `using` statement:
 
-       using SplunkMint;
+    `using SplunkMint;`
 
 2. In your **AppDelegate** class in the **WillFinishLaunching** method, add the following code:
 
-       public override bool WillFinishLaunching (UIApplication application, NSDictionary launchOptions)
-       {
-       // Code....
-       // We disable crash reporting when the debugger is attached because it conflicts with
-       // the Xamarin exception manager. Due to the nature of the platform, you cannot
-       // capture and report unhandled native crashes when the debugger is attached.
-       if (Debugger.IsAttached) 
-       {
-          Mint.SharedInstance.DisableCrashReporter ();
-       }
-       Mint.SharedInstance.InitAndStartXamarinSession ("API*KEY");
-       // Code....
-       return true;
-       }
+    ```
+    public override bool WillFinishLaunching (UIApplication application, NSDictionary launchOptions)
+    {
+        // Code....
+        // We disable crash reporting when the debugger is attached because it conflicts with
+        // the Xamarin exception manager. Due to the nature of the platform, you cannot
+        // capture and report unhandled native crashes when the debugger is attached.
+        if (Debugger.IsAttached) 
+        {
+            Mint.SharedInstance.DisableCrashReporter ();
+        }
+        Mint.SharedInstance.InitAndStartXamarinSession ("API*KEY");
+        // Code....
+        return true;
+    }
+    ```
 
 The **InitAndStartXamarinSession** method installs the Splunk exception handler and the performance monitor, sends all the saved data and performance metrics to Splunk MINT, and starts a new session for your activity.
 
@@ -200,8 +202,6 @@ In addition to reporting the sequence of events leading up to an app crash, Splu
 * To report an event, use the **LogEventWithTagAsync** method.
 * To report an event with log level, use the **LogEventWithNameAsync** method.
 
-**Note**  This feature is not available in MINT Express.
-
 Add as many events as you like to track virtually any user activity on your app. To view the event data, see the **Insights** page on your Splunk MINT Management Console dashboard.
 
 **Example code**
@@ -229,7 +229,7 @@ At times, you might expect your app to throws exceptions. When you handle those 
 * To log an exception with an extra data list, use the **LogExceptionAsync(***NSException*, *LimitedExtraDataList***)** method.
 * To log an exception with no extra data, use the **LogExceptionAsync(***NSException*, *LimitedExtraDataList***)** method but pass `null` in the **LimitedExtraDataList** parameter.
 
-Note that the **LogExceptionAsync** method accepts an** NSException **type, rather than **Exception**, which you normally catch in a Xamarin environment. For this reason an **Exception** extension method is available (**Exception.ToSplunkNSException**) so you can log the C# handled exception stacktrace.
+Note that the **LogExceptionAsync** method accepts an **NSException** type, rather than **Exception**, which you normally catch in a Xamarin environment. For this reason an **Exception** extension method is available (**Exception.ToSplunkNSException**) so you can log the C# handled exception stacktrace.
 
 Using this method helps debug any problem. To get information about the request in general, add a block implementation and examine the **MintLogResult** object.
 
@@ -254,28 +254,32 @@ Although Splunk MINT collects plenty of data associated with each crash of your 
 
 * To add custom data as a key-value pair, use the **AddExtraData** and **AddExtraDataList** methods as follows:
 
-      // Add a key-value pair.
-      Mint.SharedInstance.AddExtraData(new ExtraData("GlobalKey1", "GlobalValue1"));
+    ```
+    // Add a key-value pair.
+    Mint.SharedInstance.AddExtraData(new ExtraData("GlobalKey1", "GlobalValue1"));
 
-      // Add a LimitedExtraDataList.
-      LimitedExtraDataList extraDataList = new LimitedExtraDataList ();
-      extraDataList.AddWithKey ("ListGlobalKey1", "ListGlobalValue1");
-      extraDataList.AddWithKey ("ListGlobalKey2", "ListGlobalValue2");
-      Mint.SharedInstance.AddExtraDataList (extraDataList);
-
+    // Add a LimitedExtraDataList.
+    LimitedExtraDataList extraDataList = new LimitedExtraDataList ();
+    extraDataList.AddWithKey ("ListGlobalKey1", "ListGlobalValue1");
+    extraDataList.AddWithKey ("ListGlobalKey2", "ListGlobalValue2");
+    Mint.SharedInstance.AddExtraDataList (extraDataList);
+    ```
+    
     The **AddExtraData** method accepts an **ExtraData** class instance, which you can instantiate and pass your custom key-value.
 
     The **AddExtraDataList** method adds all instances of the **LimitedExtraDataList** to the **LimitedExtraDataList** global singleton instance object and sends appropriate values to the Splunk MINT server as key-value pairs, which you can then examine your request.
 
-* To access the global **LimitedExtraDataList** use the** Mint.SharedInstance.ExtraDataList **property:
+* To access the global **LimitedExtraDataList** use the **Mint.SharedInstance.ExtraDataList** property:
 
-       // With key-value
-       Mint.SharedInstance.ExtraDataList.AddWithKey ("GlobalKey1", "GlobalValue1");
+    ```
+    // With key-value
+    Mint.SharedInstance.ExtraDataList.AddWithKey ("GlobalKey1", "GlobalValue1");
 
-       // With adding an ExtraData instance
-       Mint.SharedInstance.ExtraDataList.Add(new ExtraData("GlobalExtraKey1", "GlobalExtraValue1"));
+    // With adding an ExtraData instance
+    Mint.SharedInstance.ExtraDataList.Add(new ExtraData("GlobalExtraKey1", "GlobalExtraValue1"));
+    ```
 
-  This usage gives the same result as the **AddExtraData** method of the **Mint.SharedInstance** because both methods access the same global **LimitedExtraDataList** singleton instance. The **LimitedExtraDataList** is an object that is limited to a maximum count of 32 objects. If you try to add an object that exceeds this count, the first object in the list is removed, FIFO. You can't add multiple values with the same key. If you try, you will not get an error but the value of an existing key will change.
+    This usage gives the same result as the **AddExtraData** method of the **Mint.SharedInstance** because both methods access the same global **LimitedExtraDataList** singleton instance. The **LimitedExtraDataList** is an object that is limited to a maximum count of 32 objects. If you try to add an object that exceeds this count, the first object in the list is removed, FIFO. You can't add multiple values with the same key. If you try, you will not get an error but the value of an existing key will change.
 
 * To remove a specific value from the extra data, use the **RemoveExtraDataWithKey** method.
 * To clear the extra data completely, use the **ClearExtraData** method.
@@ -292,11 +296,11 @@ To help investigate the cause of a crash, you can have Splunk MINT to report the
 
 * Use the **LeaveBreadcrumb** method at the points of interest in your code as follows:
 
-       Mint.SharedInstance.LeaveBreadcrumb ("ViewController:ViewDidLoad");
+    `Mint.SharedInstance.LeaveBreadcrumb ("ViewController:ViewDidLoad");`
 
 * Use the **ClearBreadcrumbs** method to clear the breadcrumb list as follows:
 
-       Mint.SharedInstance.ClearBreadcrumbs ();
+    `Mint.SharedInstance.ClearBreadcrumbs ();`
 
 ## Report user-specific data ##
 
@@ -304,7 +308,7 @@ With Splunk MINT, you can closely track the experience of any given user, for ex
 
 * Set the **UserIdentifier **property** **to a user identifier as follows:
 
-       Mint.SharedInstance.UserIdentifier = "Splunk MINT";
+    `Mint.SharedInstance.UserIdentifier = "Splunk MINT";`
 
 To search errors for a specific user name or ID, go to the Errors dashboard in Splunk MINT Management Console, then enter the user name or ID under **Search by username** in the list of filters.
 
@@ -314,13 +318,13 @@ Normally, Splunk MINT monitors all native **NSURLSession** and **NSURLConnection
 
 * To disable network monitoring, use the **DisableNetworkMonitoring** method before the **InitAndStartXamarinSession** as follows:
 
-       Mint.SharedInstance.DisableNetworkMonitoring ();
+    `Mint.SharedInstance.DisableNetworkMonitoring ();`
 
 You can add URLs to a monitoring blacklist to ignore any requests to these URLs. For example, you can add "www.facebook.com" to your blacklist to ignore monitoring requests to this site.
 
 * To add a URL to the network monitoring blacklist, use the **AddURLToBlackList** method as follows:
 
-       Mint.SharedInstance.AddURLToBlacklist ("www.splunk.com");
+    `Mint.SharedInstance.AddURLToBlacklist ("www.splunk.com");`
 
 ## Get notifications about internal SDK actions ##
 
@@ -328,22 +332,26 @@ The Splunk MINT SDK for Xamarin iOS exposes two events that you can register and
 
 * Use **CachedRequestsSent** to get notified about any requests that are sent to the server, which is usually invoked when calling the **InitAndStartXamarinSession** and **Flush** methods:
 
-       Mint.SharedInstance.CachedRequestsSent += (sender, args) =>
-       {
-           LoggedRequestEventArgs loggedRequestEventArgs = (LoggedRequestEventArgs)sender;
-           Debug.WriteLine ("Logged Request Handled {0} with JSON:\r\n{1}",
-               loggedRequestEventArgs.ResponseResult.ResultState == MintResultState.OKResultState
-               ? "Successfully" : "with Failure and",
-               loggedRequestEventArgs.ResponseResult.ClientRequest);
-       };
-
+    ```
+    Mint.SharedInstance.CachedRequestsSent += (sender, args) =>
+   {
+        LoggedRequestEventArgs loggedRequestEventArgs = (LoggedRequestEventArgs)sender;
+        Debug.WriteLine ("Logged Request Handled {0} with JSON:\r\n{1}",
+            loggedRequestEventArgs.ResponseResult.ResultState == MintResultState.OKResultState
+            ? "Successfully" : "with Failure and",
+            loggedRequestEventArgs.ResponseResult.ClientRequest);
+    };
+    ```
+    
 * Use **NetworkDataIntercepted** to get notified when a network call is monitored, then examine the captured data as follows:
 
-       Mint.SharedInstance.NetworkDataIntercepted += (sender, args) => 
-       {
-           NetworkDataFixture networkDataFixture = (NetworkDataFixture)sender;
-           Debug.WriteLine("Network Data Logged: {0}", networkDataFixture.ToJSONString);
-       };
+    ```
+    Mint.SharedInstance.NetworkDataIntercepted += (sender, args) => 
+    {
+        NetworkDataFixture networkDataFixture = (NetworkDataFixture)sender;
+        Debug.WriteLine("Network Data Logged: {0}", networkDataFixture.ToJSONString);
+    };
+    ```
 
 ## Report debugging messages ##
 
