@@ -5,6 +5,8 @@ Splunk MINT allows you to gain mobile intelligence about your mobile apps by usi
 
 *Splunk®, Splunk>®, Splunk MINT are trademarks of Splunk Inc., in the United States and other countries.  Xamarin is a trademark of Xamarin Inc.*
 
+The Splunk JavaScript Software Development Kit is licensed under the Apache License 2.0. Details can be found in the LICENSE file.
+
 ##Introduction##
 
 In addition to sending crash reports, you can send additional data to Splunk MINT to monitor specific actions and items in your mobile apps.
