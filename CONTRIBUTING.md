@@ -14,7 +14,7 @@ If you're seeing some unexpected behavior with this project, please create an [i
 
 0. Version of this project you're using (ex: 1.0)
 0. Platform version (ex: OS X 10.10)
-0. Framework version (ex: iOS version, Xamarin version, XCode version)
+0. Framework version (ex: iOS version, Xamarin version)
 0. Splunk version (ex: 6.2.2)
 0. Other relevant information (ex: local/remote environment, Splunk network configuration)
 
